@@ -1,0 +1,14 @@
+﻿@model int
+@{
+    ViewData["Title"] = "Clientes - Últimas fichas";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index">Clientes</a></li>
+    <li class="breadcrumb-item"><a asp-action="Edit" asp-route-Id="@Model">Modificar Cliente</a></li>
+    <li class="breadcrumb-item active">Últimas fichas</li>
+</ol>
+<hr />
+<div>
+    @await Component.InvokeAsync("Fichas", new { Id = Model, navegacion = false })
+</div>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MikaWeb.Models.Cliente>
+@{
+    ViewData["Title"] = "Inicio - Clientes";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+    <li class="breadcrumb-item active">Clientes</li>
+</ol>
+<div class="row">
+    <div class="col-md-12">
+        <button id="update-service-button" class="btn btn-secondary btn-sm" onclick="location.href='@Url.Action("Nuevo", "Clientes")'">Nuevo cliente</button><br /><br />
+        <table id="tbClientes" class="table" style="background-color: dimgray">
+            <thead class="table-primary">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdCliente)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Telefono)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+@section Scripts{
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/clientes.js" asp-append-version="true"></script>
+
+}

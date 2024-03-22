@@ -1,0 +1,93 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelCaja
+@{
+    ViewData["Title"] = "Cajas diarias";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+    <li class="breadcrumb-item active">Cajas</li>
+</ol>
+<hr />
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form id="buscador" method="post" asp-action="Index">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card border-secondary mb-3">
+                <div class="card-header">Opciones</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="FiltroAnio" class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <input id="filtroAnio" asp-for="FiltroAnio" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                    <span asp-validation-for="FiltroAnio" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="FiltroMes" class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9">
+                                    <select class="form-control form-control-sm" id="cboMes" asp-for="FiltroMes">
+                                        <option>Enero</option>
+                                        <option>Febrero</option>
+                                        <option>Marzo</option>
+                                        <option>Abril</option>
+                                        <option>Mayo</option>
+                                        <option>Junio</option>
+                                        <option>Julio</option>
+                                        <option>Agosto</option>
+                                        <option>Septiembre</option>
+                                        <option>Octubre</option>
+                                        <option>Noviembre</option>
+                                        <option>Diciembre</option>
+                                    </select>
+                                    <span asp-validation-for="FiltroMes" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-secondary btn-sm">Buscar</button>
+                        </div>
+                        <div class="col-sm-5" style="text-align:right">
+                            <button type="submit" asp-route-print="P" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_excel.png);width:160px;">Exportar listado</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="row">
+    <div class="col-sm-12">
+        <table id="tbCajas" class="table" style="background-color: dimgray">
+            <thead class="table-primary">
+                <tr>
+                    <th style="text-align: center;">#</th>
+                    <th style="text-align: center;">Fecha</th>
+                    <th style="text-align: center;">Estado</th>
+                    <th style="text-align: center;">Metálico(€)</th>
+                    <th style="text-align: center;">Tarjeta(€)</th>
+                    <th style="text-align: center;">Gastos(€)</th>
+                    <th style="text-align: center;">Iva soportado(€)</th>
+                    <th style="text-align: center;">Iva repercutido(€)</th>
+                    <th style="text-align: center;">Saldo(€)</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+@section Scripts{
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/cajas.js" asp-append-version="true"></script>
+
+}

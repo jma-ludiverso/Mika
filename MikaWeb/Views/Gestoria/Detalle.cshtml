@@ -1,0 +1,221 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelGestoria
+@{
+    ViewData["Title"] = "Datos Gestoría";
+}
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form id="gestoria" asp-action="Detalle">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="jumbotron" style="padding:1rem 1rem;">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group row" style="margin-bottom: 0rem;">
+                    <input id="hdAnio" type="hidden" asp-for="Anio" />
+                    <input id="hdMes" type="hidden" asp-for="NMes" />
+                    <span class="col-sm-6"><label class="control-label">Datos Gestoría: </label></span>
+                    <div class="col-sm-6">
+                        <input asp-for="Mes" class="form-control form-control-sm formsmall" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group row" style="margin-bottom: 0rem;">
+                    <span class="col-sm-6"><label asp-for="IvaRepercutido" class="control-label"></label></span>
+                    <div class="col-sm-6">
+                        <input id="ivarep" asp-for="IvaRepercutido" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:2px;">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-3"><i class="fas fa-credit-card" title="Tarjeta"></i></span>
+                            <div class="col-sm-9">
+                                <input asp-for="IvaT" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-3"><i class="fas fa-coins" title="Efectivo"></i></span>
+                            <div class="col-sm-9">
+                                <input id="ivaef" asp-for="IvaE" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group row" style="margin-bottom: 0rem;">
+                    <span class="col-sm-6"><label asp-for="IvaSoportado" class="control-label"></label></span>
+                    <div class="col-sm-6">
+                        <input asp-for="IvaSoportado" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group row" style="margin-bottom: 0rem;">
+                    <span class="col-sm-4"><label class="control-label">Valor: </label></span>
+                    <div class="col-sm-8" style="padding-right:2px;">
+                        <input asp-for="Efectivo" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" />
+                        <span asp-validation-for="Efectivo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row" style="float:right;">
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-calculator"></i> Calcular valor</button>
+                </div>
+            </div>
+            <div class="col-sm-3" style="text-align:right;">
+                <div class="row" style="float:right;">
+                    <input id="hdSalon" type="hidden" asp-for="IdSalon" />
+                    <button type="submit" asp-route-accion="P" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_excel.png);width:160px;">Imprimir listados</button>
+                </div>
+                <div class="row" style="float:right;">
+                    <a asp-action="Index" asp-route-anio="@Model.Anio" asp-route-nmes="@Model.NMes" asp-route-idsalon="@Model.IdSalon" class="btn btn-secondary btn-sm" style="width:160px;"><i class="far fa-caret-square-left"></i> Volver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#fichas1">Listado 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#fichas2">Listado 2</a>
+                </li>
+            </ul>
+            <div id="myTabContent" class="tab-content" style="font-size:small;">
+                <div class="tab-pane fade active show" id="fichas1">
+                    <table id="tbListado1" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Fecha</th>
+                                <th style="text-align: center;">Forma pago</th>
+                                <th style="text-align: center;">Base(€)</th>
+                                <th style="text-align: center;">Descuentos(€)</th>
+                                <th style="text-align: center;">Iva(€)</th>
+                                <th style="text-align: center;">Total(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="fichas2">
+                    <table id="tbListado2" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Fecha</th>
+                                <th style="text-align: center;">Forma pago</th>
+                                <th style="text-align: center;">Base(€)</th>
+                                <th style="text-align: center;">Descuentos(€)</th>
+                                <th style="text-align: center;">Iva(€)</th>
+                                <th style="text-align: center;">Total(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/gestoria.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            var table1 = $('#tbListado1').DataTable();
+            var table2 = $('#tbListado2').DataTable();
+
+            $("#tbListado1 tbody").on('click', '.excluir', function (event) {
+                var ficha = $(this).data("nficha");
+                var anio = $('#hdAnio').val();
+                var mes = $('#hdMes').val();
+                var idsalon = $('#hdSalon').val();
+                var ivae = parseFloat($('#ivaef').val().replace(',', '.'));
+                var ivar = parseFloat($('#ivarep').val().replace(',', '.'));
+                var row = table1.row($(this).parents('tr'));
+
+                $.ajax({
+                    url: "@(Url.Action("fichaRecalcular"))",
+                    data: { "nficha": ficha, "anio": anio, "mes": mes, "idsalon": idsalon, "acc": "EXC" },
+                    success: function (data) {
+                        ivae = ivae - data;
+                        ivar = ivar - data;
+                        $('#ivaef').val((ivae).toFixed(2).replace('.', ','));
+                        $('#ivarep').val((ivar).toFixed(2).replace('.', ','));
+
+                        var rowNode = row.node();
+                        row.node().remove();
+
+                        table2
+                            .row.add(rowNode)
+                            .draw();
+
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+            });
+
+            $("#tbListado2 tbody").on('click', '.incluir', function (event) {
+                var ficha = $(this).data("nficha");
+                var anio = $('#hdAnio').val();
+                var mes = $('#hdMes').val();
+                var idsalon = $('#hdSalon').val();
+                var ivae = parseFloat($('#ivaef').val().replace(',', '.'));
+                var ivar = parseFloat($('#ivarep').val().replace(',', '.'));
+                var row = table2.row($(this).parents('tr'));
+
+                $.ajax({
+                    url: "@(Url.Action("fichaRecalcular"))",
+                    data: { "nficha": ficha, "anio": anio, "mes": mes, "idsalon": idsalon, "acc": "INC" },
+                    success: function (data) {
+                        ivae = ivae + data;
+                        ivar = ivar + data;
+                        $('#ivaef').val((ivae).toFixed(2).replace('.', ','));
+                        $('#ivarep').val((ivar).toFixed(2).replace('.', ','));
+
+                        var rowNode = row.node();
+                        row.node().remove();
+
+                        table1
+                            .row.add(rowNode)
+                            .draw();
+
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+            });
+        });
+
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)?(?:,\d+)?$/.test(value);
+        }
+
+
+    </script>
+}

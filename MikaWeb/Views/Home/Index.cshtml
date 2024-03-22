@@ -1,0 +1,103 @@
+﻿@model Inicio
+@{
+    ViewData["Title"] = "Inicio";
+}
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<div class="text-center">
+    <h3 class="display-4">
+        @Model.Mensaje
+        @if (Model.Mensaje.Contains("días"))
+        {
+            <i class='fas fa-sun'></i>
+        }
+        else
+        {
+            if (Model.Mensaje.Contains("tardes"))
+            {
+                <i class='fas fa-mug-hot'></i>
+            }
+            else
+            {
+                <i class="fas fa-cloud-moon"></i>
+            }
+        }
+    </h3>
+    <p>@Model.Fecha</p>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a asp-controller="Calendario" asp-action="Citas" asp-route-fecha="@Model.Fecha" class="alert-link">Citas</a>
+                <span class="badge badge-primary badge-pill">@Model.TotalCitas</span>
+            </li>
+        </ul>
+        <br />
+        @foreach (var item in Model.Citas)
+        {
+            <div class="card bg-light mb-3">
+                <div class="card-header">@item.CodigoEmpleado-@item.Empleado</div>
+                <div class="card-body">
+                    @foreach (var cit in item.Citas)
+                    {
+                        <div>
+                            <a asp-controller="Fichas" asp-action="Ficha" asp-route-cli="@cit.Cliente.IdCliente" class="alert-link" style="color: #272B30;"><i class="far fa-clock"></i> @cit.Cliente.Nombre - @cit.Hora</a>
+                        </div>
+                        <span style="color: #272B30;">Teléfono: @cit.Cliente.Telefono</span><br />
+                        <span style="color: #272B30;">Notas: @cit.Notas</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-sm-1">
+        &nbsp;
+    </div>
+    <div class="col-sm-4">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="font-weight: 700;color: #fff;">
+                Fichas activas
+                <span class="badge badge-primary badge-pill">@Model.Fichas.Count</span>
+            </li>
+        </ul>        
+        <br />
+        @foreach (var item in Model.Fichas)
+        {
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">
+                    <a asp-controller="Fichas" asp-action="Ficha" asp-route-numficha="@item.NFicha" class="alert-link"><i class="far fa-file-alt"></i><strong> # Ficha @item.NFicha </strong></a>
+                </div>
+                <div class="card-body">
+                    <span class="card-text">Cliente: @item.Cliente</span><br />
+                    <span class="card-text">Atendido por: @item.Empleado</span><br />
+                    <span class="card-text">Servicios: @item.Servicios</span>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-sm-1">
+        &nbsp;
+    </div>
+    <div class="col-sm-3">
+        <div class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+            <div class="card-header">
+                <i class="fas fa-cash-register"></i><strong> Caja <a asp-controller="Cajas" asp-action="Caja" asp-route-nCaja="@Model.NCaja">@Model.Fecha</a></strong>
+                @if (Model.EstadoCaja)
+                {
+                    <i class="fas fa-lock" title="cerrada"></i>
+                }
+                else
+                {
+                    <i class="fas fa-lock-open" title="abierta"></i>
+                }
+            </div>
+            <div class="card-body">
+                <span class="card-text">Fichas día: @Model.Clientes</span><br />
+                <span class="card-text">Total (€): @Model.Total.ToString("N")</span><br /><br />
+                <div class="progress">
+                    <div class="progress-bar @Model.CssCaja" role="progressbar" style="width: @Model.ProgresoLista%;" aria-valuenow="@Model.ProgresoLista" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

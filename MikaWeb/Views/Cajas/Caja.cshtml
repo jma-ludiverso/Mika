@@ -1,0 +1,382 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MikaWeb.Areas.Identity.Data
+@model MikaWeb.Models.ViewModels.ViewModelCaja
+@inject UserManager<MikaWebUser> UserManager
+@{
+    ViewData["Title"] = "Caja diaria";
+}
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form id="frmCaja" asp-action="Caja">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">
+                    <input id="NCaja" type="hidden" asp-for="Caja.NCaja" />
+                    <input id="hdFecha" type="hidden" asp-for="Caja.Fecha" />
+                    <input id="hdAnio" type="hidden" asp-for="Caja.Anio" />
+                    <input id="hdMes" type="hidden" asp-for="Caja.Mes" />
+                    <i class="far fa-file-alt"></i><strong> # Caja @Model.Caja.NCaja </strong>
+                    <div class="form-group" style="display:-webkit-inline-flex;height:8px;">
+                        <span>
+                            - @Model.Caja.Fecha.ToShortDateString()
+                            @if (Model.Caja.Cerrada)
+                            {
+                                <i class="fas fa-lock" title="cerrada"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-lock-open" title="abierta"></i>
+                            }
+                        </span>
+                    </div>
+                    <div style="float:right;">
+                        <input id="hdSalon" type="hidden" asp-for="Caja.IdSalon" />
+                        <button type="submit" asp-route-acc="P" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_excel.png);width:160px;">Exportar listado</button>
+                        <button type="submit" asp-route-acc="PD" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_excel.png);width:160px;">Listado detallado</button>
+                        @if (Model.Caja.Cerrada)
+                        {
+                            <button type="submit" class="btn btn-secondary btn-sm" asp-route-acc="N" disabled>Guardar</button>
+                            <button type="submit" class="btn btn-success btn-sm" asp-route-acc="S" disabled>Guardar y cerrar caja</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-secondary btn-sm" asp-route-acc="N">Guardar</button>
+                            <button type="submit" class="btn btn-success btn-sm" asp-route-acc="S">Guardar y cerrar caja</button>
+                        }
+                    </div>
+                </div>
+                <div class="card-body" style="padding:0.25rem;">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-coins"></i> <label asp-for="Caja.Metalico" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Caja.Metalico" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Caja.Metalico" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-receipt"></i> <label asp-for="Caja.Gastos" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Caja.Gastos" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Caja.Gastos" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="RetiradaEfectivo" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="RetiradaEfectivo" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="RetiradaEfectivo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-credit-card"></i> <label asp-for="Caja.Visas" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Caja.Visas" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Caja.Visas" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0.5rem;">
+                                &nbsp;
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="SaldoBruto" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="SaldoBruto" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="SaldoBruto" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="Caja.IvaRepercutido" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Caja.IvaRepercutido" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Caja.IvaRepercutido" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="Caja.IvaSoportado" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Caja.IvaSoportado" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Caja.IvaSoportado" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="Caja.SaldoNeto" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Caja.SaldoNeto" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Caja.SaldoNeto" class="text-danger"></span>
+                                </div>
+                            </div>
+                            @if ((await UserManager.GetUserAsync(User)).IsAdmin)
+                            {
+                                <div class="form-group row" style="margin-bottom: 0rem;">
+                                    <span class="col-sm-6"><label asp-for="Listado" class="control-label"></label></span>
+                                    <div class="col-sm-6">
+                                        <input id="listado" asp-for="Listado" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                        <span asp-validation-for="Listado" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#fichasAll">Fichas caja (todas)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#fichasE">Fichas caja (sólo efectivo) <i class="fas fa-coins"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#fichasT">Fichas caja (sólo tarjetas) <i class="fas fa-credit-card"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#gastos">Gastos caja <i class="fas fa-receipt"></i></a>
+                </li>
+            </ul>
+            <div id="myTabContent" class="tab-content" style="font-size:small;">
+                <div class="tab-pane fade active show" id="fichasAll">
+                    <table id="tbFichasAll" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Cliente</th>
+                                <th style="text-align: center;">Forma pago</th>
+                                <th style="text-align: center;">Base(€)</th>
+                                <th style="text-align: center;">Descuentos(€)</th>
+                                <th style="text-align: center;">Iva(€)</th>
+                                <th style="text-align: center;">Total(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="fichasE">
+                    <table id="tbFichasE" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Cliente</th>
+                                <th style="text-align: center;">Base(€)</th>
+                                <th style="text-align: center;">Descuentos(€)</th>
+                                <th style="text-align: center;">Iva(€)</th>
+                                <th style="text-align: center;">Total(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="fichasT">
+                    <table id="tbFichasT" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Cliente</th>
+                                <th style="text-align: center;">Base(€)</th>
+                                <th style="text-align: center;">Descuentos(€)</th>
+                                <th style="text-align: center;">Iva(€)</th>
+                                <th style="text-align: center;">Total(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="gastos">
+                    <table id="tbGastos" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Concepto</th>
+                                <th style="text-align: center;">Importe(€)</th>
+                                <th style="text-align: center;">Iva(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="text-align:right;">
+                        @if (Model.Caja.Cerrada)
+                        {
+                            <button id="nuevoGasto" type="button" class="btn btn-secondary btn-sm" style="margin-bottom:10px" disabled><i class="fa fa-plus"></i> Nuevo gasto</button>
+                        }
+                        else
+                        {
+                            <button id="nuevoGasto" type="button" class="btn btn-secondary btn-sm" style="margin-bottom:10px" data-nlinea="-1"><i class="fa fa-plus"></i> Nuevo gasto</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="nuevalineaModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content text-white bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title">Caja diaria - Linea de gasto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="nuevaLinea-container" class="container-fluid">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="borralineaModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-light" style="color:black;">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Confirma que desea borrar la línea seleccionada?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Este cambio no podrá deshacerse</p>
+                    <input id="hdNLinea" type="hidden" asp-for="LineaGasto.Linea" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button id="borraLinea" type="submit" class="btn btn-secondary btn-sm" asp-action="Caja" asp-route-acc="B">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="borrafichaModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-light" style="color:black;">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Confirma que desea borrar la ficha seleccionada?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Este cambio no podrá deshacerse</p>
+                    <input id="hdNFicha" type="hidden" asp-for="FichaBorrar" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button id="borraFicha" type="submit" class="btn btn-secondary btn-sm" asp-action="Caja" asp-route-acc="BF">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+
+@section Scripts{
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/cajasfichas.js" asp-append-version="true"></script>
+    <script src="~/js/gastos.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#nuevoGasto").click(nuevaLinea);
+            $("#tbFichasAll tbody").on('click', '.anular', function (event) {
+                $('#hdNFicha').val($(this).data("id"));
+            });
+            //$("#tbFichasAll tbody").on('click', '.excluir', function (event) {
+            //    var ficha = $(this).data("id");
+            //    incExc(ficha, $(this).parents('div .incexc'), "EXC");
+            //});
+            //$("#tbFichasAll tbody").on('click', '.incluir', function (event) {
+            //    var ficha = $(this).data("id");
+            //    incExc(ficha, $(this).parents('div .incexc'), "INC");
+            //});
+            $("#tbFichasE tbody").on('click', '.anular', function (event) {
+                $('#hdNFicha').val($(this).data("id"));
+            });
+            //$("#tbFichasE tbody").on('click', '.excluir', function (event) {
+            //    var ficha = $(this).data("id");
+            //    incExc(ficha, $(this).parents('div .incexc'), "EXC");
+            //});
+            //$("#tbFichasE tbody").on('click', '.incluir', function (event) {
+            //    var ficha = $(this).data("id");
+            //    incExc(ficha, $(this).parents('div .incexc'), "INC");
+            //});
+            $("#tbFichasT tbody").on('click', '.anular', function (event) {
+                $('#hdNFicha').val($(this).data("id"));
+            });
+            $("#tbGastos tbody").on('click', '.nuevalinea', function (event) {
+                nuevaLinea($(this).data("id"));
+            });
+            $("#tbGastos tbody").on('click', '.borralinea', function (event) {
+                $('#hdNLinea').val($(this).data("id"));
+            });
+        });
+
+        //function incExc(ficha, objDiv, acc) {
+        //    var anio = $('#hdAnio').val();
+        //    var mes = $('#hdMes').val();
+        //    var idsalon = $('#hdSalon').val();
+
+        //     $.ajax({
+        //        url: "@(Url.Action("fichaRecalcular"))",
+        //        data: { "nficha": ficha, "anio": anio, "mes": mes, "idsalon": idsalon, "acc": acc },
+        //         success: function (data) {
+        //            var ivaL = parseFloat($('#listado').val().replace(',', '.'));
+        //            if (acc == "EXC") {
+        //                ivaL = ivaL + data;
+        //                objDiv.html('<span class="badge badge-success"><a href="#" class="incluir" data-id="' + ficha + '">Incluir</a></span>');
+        //            } else {
+        //                ivaL = ivaL - data;
+        //                objDiv.html('<span class="badge badge-danger"><a href="#" class="excluir" data-id="' + ficha + '">Excluir</a></span>');
+        //            }
+        //            $('#listado').val((ivaL).toFixed(2).replace('.', ','));
+        //        },
+        //        error: function (xhr) {
+        //            alert("Something went wrong, please try again");
+        //        }
+        //    });
+        //}
+
+        function ivagasto() {
+            var iva = parseFloat($('#gastoIvaPorc').val().replace(',', '.'));
+            var prec = parseFloat($('#importegasto').val().replace(',', '.'));
+            if (isNaN(prec)) {
+                prec = 0;
+            }
+            if (isNaN(iva)) {
+                iva = 0;
+            }
+            var cantidad = prec * (iva / 100);
+            $('#gastoIvaCant').val((cantidad).toFixed(2).replace('.', ','));
+        }
+
+        function nuevaLinea(p) {
+            var url = '/Cajas/AddOrEdit';
+            var nlinea = $(this).attr('data-nlinea');
+            if (typeof nlinea === "undefined") {
+                nlinea = p;
+            }
+            $.ajax({
+                url: url + '?nlinea=' + nlinea,
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(@Html.Raw(Json.Serialize(Model)))
+            }).done(function (res) {
+                $("#nuevaLinea-container").html(res);
+                $('#gastoIvaPorc').keyup(ivagasto);
+                $('#nuevalineaModal').modal('show');
+            });
+        }
+
+    </script>
+}

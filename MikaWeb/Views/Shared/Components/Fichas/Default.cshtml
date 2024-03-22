@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MikaWeb.Models.ViewModels.ViewModelFicha>
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<div class="row">
+    <div class="col-md-12">
+        <table id="tbFichas" class="table" style="background-color:dimgray;min-width:max-content;">
+            <thead class="table-primary">
+                <tr>
+                    <th style="text-align:center;"># Ficha</th>
+                    <th style="text-align:center;">Fecha</th>
+                    <th style="text-align:center;">Total (€)</th>
+                    <th style="text-align:center;">Empleado</th>
+                    <th style="text-align:center;">Descripción</th>
+                    <th style="text-align:center;">Precio (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    bool bAlternativo = false;
+                    string cssclass = "";
+                }
+                @foreach (MikaWeb.Models.ViewModels.ViewModelFicha f in Model)
+                {
+                    //
+                    if (bAlternativo)
+                    {
+                        bAlternativo = false;
+                        cssclass = "class='table-secondary'";
+                    }
+                    else
+                    {
+                        bAlternativo = true;
+                        cssclass = "";
+                    }
+                    <tr @Html.Raw(cssclass)>
+                        <td rowspan="@f.Datos.Lineas.Count" style="text-align:center;">@f.Datos.NFicha</td>
+                        <td rowspan="@f.Datos.Lineas.Count" style="text-align:center;">@f.Datos.Fecha.ToShortDateString()</td>
+                        <td rowspan="@f.Datos.Lineas.Count" style="text-align:center;">@f.Datos.Total.ToString("N")</td>
+                        @for (int i = 0; i <= f.Datos.Lineas.Count - 1; i++)
+                        {
+                            if (i != 0)
+                            {
+                                @Html.Raw("<tr " + cssclass + ">")
+                            }
+                            <td>@f.Datos.Lineas[i].Empleado</td>
+                            <td>@f.Datos.Lineas[i].Descripcion</td>
+                            <td style="text-align:center;">@f.Datos.Lineas[i].Total.ToString("N")</td>
+                            @if (i < f.Datos.Lineas.Count - 1)
+                            {
+                                @Html.Raw("</tr>")
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,255 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelGestoria
+@{
+    ViewData["Title"] = "Datos Gestoría";
+}
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form id="gestoria" asp-action="Index">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="jumbotron" style="padding:1rem 1rem;">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group row" style="margin-bottom: 0rem;">
+                    <span class="col-sm-4"><label asp-for="Anio" class="control-label"></label></span>
+                    <div class="col-sm-8">
+                        <input id="anio" asp-for="Anio" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                        <span asp-validation-for="Anio" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group row" style="margin-bottom: 0rem;">
+                    <input id="hdMes" type="hidden" asp-for="NMes" />
+                    <label asp-for="Mes" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <select class="form-control form-control-sm" id="cboMes" asp-for="Mes">
+                            <option>Enero</option>
+                            <option>Febrero</option>
+                            <option>Marzo</option>
+                            <option>Abril</option>
+                            <option>Mayo</option>
+                            <option>Junio</option>
+                            <option>Julio</option>
+                            <option>Agosto</option>
+                            <option>Septiembre</option>
+                            <option>Octubre</option>
+                            <option>Noviembre</option>
+                            <option>Diciembre</option>
+                        </select>
+                        <span asp-validation-for="Mes" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <input id="hdSalon" type="hidden" asp-for="IdSalon" />
+                <button type="submit" class="btn btn-success btn-sm" style="width: max-content;" asp-route-accion="C"><i class="fas fa-calculator"></i> Recuperar datos</button>
+            </div>
+            <div class="col-sm-7" style="text-align:right;">
+                <a asp-action="Print" asp-route-anio="@Model.Anio" asp-route-mes="@Model.NMes" asp-route-salon="@Model.IdSalon" target="_blank" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_pdf.png),linear-gradient(#8a9196, #7A8288 60%, #70787d);width:150px;">Imprimir resumen</a>
+                <a asp-action="PrintFacts" asp-route-anio="@Model.Anio" asp-route-mes="@Model.NMes" asp-route-salon="@Model.IdSalon" target="_blank" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_pdf.png),linear-gradient(#8a9196, #7A8288 60%, #70787d);width:150px;">Imprimir facturas</a>
+                <button type="submit" asp-route-accion="PG" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_excel.png);width:160px;">Listado gestoría</button>
+                @if (Model.Cerrado)
+                {
+                    <button type="submit" class="btn btn-warning btn-sm" asp-route-accion="ROP">Reabrir mes</button>
+                }
+                else
+                {
+                    <button onclick="return false;" class="btn btn-success btn-sm" data-toggle="modal" data-target="#cierramesModal"><i class="fas fa-lock" title="cerrada"></i> Cerrar mes</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card border-success mb-3">
+                <div class="card-header">Ingresos</div>
+@*                @if (Model.Cerrado)
+                {
+                    <div class="card-header">Ingresos</div>
+                }
+                else
+                {
+                    <div class="card-header"><a asp-action="Detalle" asp-route-anio="@Model.Anio" asp-route-nmes="@Model.NMes" asp-route-salon="@Model.IdSalon">Ingresos</a></div>
+                }*@
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-credit-card"></i> <label asp-for="Tarjeta" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Tarjeta" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-credit-card"></i> <label asp-for="IvaT" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="IvaT" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-coins"></i> <label asp-for="Efectivo" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="Efectivo" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><i class="fas fa-coins"></i> Iva Efectivo:</span>
+                                <div class="col-sm-6">
+                                    <input asp-for="IvaE" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="TotalIngresos" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="TotalIngresos" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <span class="col-sm-6"><label asp-for="IvaRepercutido" class="control-label"></label></span>
+                                <div class="col-sm-6">
+                                    <input asp-for="IvaRepercutido" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border-danger mb-3">
+                <div class="card-header">Gastos</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-6"><label asp-for="Gastos" class="control-label"></label></span>
+                            <div class="col-sm-6">
+                                <input asp-for="Gastos" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-6"><label asp-for="IvaSoportado" class="control-label"></label></span>
+                            <div class="col-sm-6">
+                                <input asp-for="IvaSoportado" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-6"><label asp-for="Comisiones" class="control-label"></label></span>
+                            <div class="col-sm-6">
+                                <input asp-for="Comisiones" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border-success mb-3">
+                <div class="card-header">Saldo</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-6"><label asp-for="SaldoNeto" class="control-label" style="width:100px;"></label></span>
+                            <div class="col-sm-6">
+                                <input asp-for="SaldoNeto" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group row" style="margin-bottom: 0rem;">
+                            <span class="col-sm-6"><label asp-for="SaldoNetoCom" class="control-label"></label></span>
+                            <div class="col-sm-6">
+                                <input asp-for="SaldoNetoCom" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0:N2}" autocomplete="off" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="font-size: smaller;">
+            <div class="card border-light mb-3">
+                <div class="card-header">Producción</div>
+                <div class="card-body">
+                    <table id="tbProduccion" class="table" style="background-color: dimgray">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="text-align: center;" rowspan="2">Empleado</th>
+                                <th style="text-align: center;" colspan="3">Servicios-Lavado</th>
+                                <th style="text-align: center;" colspan="3">Servicios-Resto</th>
+                                <th style="text-align: center;" colspan="3">Servicios-Técnicos</th>
+                                <th style="text-align: center;" colspan="3">Productos</th>
+                                <th style="text-align: center;" rowspan="2">Tot.Prod.<br />(€)</th>
+                                <th style="text-align: center;" rowspan="2">Tot.Com.<br />(€)</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Prod.<br />(€)</th>
+                                <th style="text-align: center;">Com.<br />(€)</th>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Prod.<br />(€)</th>
+                                <th style="text-align: center;">Com.<br />(€)</th>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Prod.<br />(€)</th>
+                                <th style="text-align: center;">Com.<br />(€)</th>
+                                <th style="text-align: center;">#</th>
+                                <th style="text-align: center;">Prod.<br />(€)</th>
+                                <th style="text-align: center;">Com.<br />(€)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="cierramesModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-light" style="color:black;">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Confirma que desea cerrar el mes indicado?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>El cierre del mes cerrará las cajas que pudiera haber abiertas. No podrán introducirse más datos para el mes cerrado.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-secondary btn-sm" asp-route-accion="CM"><i class="fas fa-lock" title="cerrada"></i> Cerrar mes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+@section Scripts{
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/produccion.js" asp-append-version="true"></script>
+
+}

@@ -1,0 +1,85 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelFicha
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-sm-2 nopadding">
+        <label asp-for="LineaTrabajo.Codigo" class="control-label"></label>
+    </div>
+    <div class="col-sm-1 nopadding">
+        <input id="codigoemp" asp-for="LineaTrabajo.Codigo" class="form-control form-control-sm formsmall" autocomplete="off" required maxlength="2" placeholder="cod." />
+        <span asp-validation-for="LineaTrabajo.Codigo" class="text-danger"></span>
+    </div>
+    <div class="col-sm-9 nopadding">
+        <input id="nombreempleado" asp-for="LineaTrabajo.Empleado" class="form-control form-control-sm formsmall" autocomplete="off" readonly />
+    </div>
+</div>
+<br />
+<div class="row" style="margin-bottom:10px;">
+    <div class="col-sm-1 nopadding">
+        <input id="hdIdServicio" type="hidden" asp-for="LineaTrabajo.IdServicio" />
+        <label asp-for="LineaTrabajo.CodigoServicio" class="control-label"></label>
+        <input id="codigoserv" asp-for="LineaTrabajo.CodigoServicio" class="form-control form-control-sm formsmall" autocomplete="off" required maxlength="2" placeholder="cod." />
+        <span asp-validation-for="LineaTrabajo.CodigoServicio" class="text-danger"></span>
+    </div>
+    <div class="col-sm-1 nopadding" style="text-align: center;">
+        <label asp-for="LineaTrabajo.Tipo" class="control-label"></label>
+        @if (Model != null)
+        {
+            @if (!string.IsNullOrEmpty(Model.LineaTrabajo.Tipo))
+            {
+                @if (Model.LineaTrabajo.Tipo.Equals("Producto"))
+                {
+                    <div id="Producto" style="text-align: center;"><i class="fab fa-product-hunt" title="Venta producto"></i></div>
+                    <div id="Servicio" style="text-align: center;display:none;"><i class="fas fa-cut" title="Servicio"></i></div>
+                }
+                else
+                {
+                    <div id="Servicio" style="text-align: center;"><i class="fas fa-cut" title="Servicio"></i></div>
+                    <div id="Producto" style="text-align: center;display:none;"><i class="fab fa-product-hunt" title="Venta producto"></i></div>
+                }
+            }
+            else
+            {
+                <div id="Servicio" style="text-align: center;display:none;"><i class="fas fa-cut" title="Servicio"></i></div>
+                <div id="Producto" style="text-align: center;display:none;"><i class="fab fa-product-hunt" title="Venta producto"></i></div>
+            }
+        }
+        <input id="hdTipo" type="hidden" asp-for="LineaTrabajo.Tipo" />
+    </div>
+    <div class="col-sm-4 nopadding">
+        <label asp-for="LineaTrabajo.Descripcion" class="control-label"></label>
+        <input id="descserv" asp-for="LineaTrabajo.Descripcion" class="form-control form-control-sm formsmall" autocomplete="off" required maxlength="50" />
+        <span asp-validation-for="LineaTrabajo.Descripcion" class="text-danger"></span>
+    </div>
+    <div class="col-sm-2 nopadding">
+        <label asp-for="LineaTrabajo.Base" class="control-label"></label>
+        <input id="Precio" asp-for="LineaTrabajo.Base" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+        <span asp-validation-for="LineaTrabajo.Base" class="text-danger"></span>
+    </div>
+    <div class="col-sm-1 nopadding">
+        <input id="hdDescant" type="hidden" asp-for="LineaTrabajo.DescuentoCant" />
+        <label asp-for="LineaTrabajo.DescuentoPorc" class="control-label"></label>
+        <input id="DescPorc" asp-for="LineaTrabajo.DescuentoPorc" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+        <span asp-validation-for="LineaTrabajo.DescuentoPorc" class="text-danger"></span>
+    </div>
+    <div class="col-sm-1 nopadding">
+        <input id="hdIvacant" type="hidden" asp-for="LineaTrabajo.IvaCant" />
+        <label asp-for="LineaTrabajo.IvaPorc" class="control-label"></label>
+        <input id="IvaPorc" asp-for="LineaTrabajo.IvaPorc" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+        <span asp-validation-for="LineaTrabajo.IvaPorc" class="text-danger"></span>
+    </div>
+    <div class="col-sm-2 nopadding">
+        <label asp-for="LineaTrabajo.Total" class="control-label"></label>
+        <input id="PVP" asp-for="LineaTrabajo.Total" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+        <span asp-validation-for="LineaTrabajo.Total" class="text-danger"></span>
+    </div>
+</div>
+<div class="modal-footer" style="margin-right:-25px;margin-left:-15px;">
+    <input id="hdBorrar" type="hidden" asp-for="Datos.NFicha" />
+    <input id="hdSalon" type="hidden" asp-for="Datos.IdSalon" />
+    <input id="hdNLinea" type="hidden" asp-for="LineaTrabajo.Linea" />
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button id="guardaLinea" type="submit" class="btn btn-secondary btn-sm" asp-action="Ficha" asp-route-acc="L">Guardar</button>
+</div>

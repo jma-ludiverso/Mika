@@ -1,0 +1,242 @@
+﻿@{
+    ViewData["Title"] = "Gestión";
+}
+<div class="row">
+    <div class="col-sm-6">
+        <div id="chartProd"></div>
+    </div>
+    <div class="col-sm-6">
+        <div id="chartServ"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm">
+        <div id="chartAnios"></div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawBarColors);
+        google.charts.setOnLoadCallback(drawAnios);
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+        function drawChart() {
+
+            var jsonData = $.ajax({
+                url: "@(Url.Action("getChartProducciones"))",
+                dataType: "json",
+                async: false
+            }).responseText;
+            var data = new google.visualization.DataTable(jsonData);
+            var formatter = new google.visualization.NumberFormat(
+                { suffix: '€', decimalSymbol: ',' });
+            formatter.format(data, 1); // Apply formatter to second column
+
+            // Set chart options
+            var options = {
+                'title': 'Producciones mes',
+                'width': 400,
+                'height': 330,
+                backgroundColor: {
+                    fill: '#272B30',
+                    fillOpacity: 0.8
+                },
+                titleTextStyle: {
+                    color: '#d9d9d9',
+                    bold: true
+                },
+                tooltip: {
+                    showColorCode: true,
+                    textStyle: {
+                        fontName : 'Segoe UI'
+                    }
+                },
+                legend: {
+                    textStyle: {
+                        color: '#d9d9d9'
+                    }
+                }
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chartProd'));
+            chart.draw(data, options);
+        }
+
+        function drawBarColors() {
+            var jsonData = $.ajax({
+                url: "@(Url.Action("getChartServicios"))",
+                dataType: "json",
+                async: false
+            }).responseText;
+            var data = new google.visualization.DataTable(jsonData);
+            var formatter = new google.visualization.NumberFormat(
+                { suffix: '€', decimalSymbol: ',' });
+            formatter.format(data, 1);
+            formatter.format(data, 2);
+            var level = 0;
+            var options = {
+                title: 'Producción por tipo de servicio',
+                width: 400,
+                height: 330,
+                colors: ['#ED480F', '#0F6AED'],
+                backgroundColor: '#272B30',
+                chartArea: {
+                    backgroundColor: '#EAEDE2'
+                },
+                hAxis: {
+                    title: 'Producción',
+                    minValue: 0,
+                    textStyle: {
+                        color: '#d9d9d9'
+                    },
+                    titleTextStyle: {
+                        color: '#d9d9d9'
+                    },
+                    gridlines: {
+                        color: '#d9d9d9'
+                    }
+                },
+                vAxis: {
+                    title: 'Servicio',
+                    textStyle: {
+                        color: '#d9d9d9'
+                    },
+                    titleTextStyle: {
+                        color: '#d9d9d9'
+                    },
+                    gridlines: {
+                        color: '#d9d9d9'
+                    }
+                },
+                titleTextStyle: {
+                    color: '#d9d9d9',
+                    bold: true
+                },
+                tooltip: {
+                    showColorCode: true,
+                    textStyle: {
+                        fontName: 'Segoe UI'
+                    }
+                },
+                legend: {
+                    textStyle: {
+                        color: '#d9d9d9'
+                    },
+                    position: 'top'
+                }
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('chartServ'));
+            chart.draw(data, options);
+            google.visualization.events.addListener(chart, 'select', selectHandler);
+            google.visualization.events.addListener(chart, 'onmouseover', uselessHandler2);
+            google.visualization.events.addListener(chart, 'onmouseout', uselessHandler3);
+
+            function selectHandler() {
+                var selection = chart.getSelection()[0];
+                if (selection) {
+                    var item = data.getValue(selection.row, 0);
+                    if (level == 1) {
+                        item = null;
+                    }
+                    var jsonData = $.ajax({
+                        url: "@(Url.Action("getChartServicios"))",
+                        data: { "tipo": item },
+                        dataType: "json",
+                        async: false
+                    }).responseText;
+                    data = new google.visualization.DataTable(jsonData);
+                    formatter.format(data, 1);
+                    formatter.format(data, 2);
+                    chart.draw(data, options);
+                    if (level == 0) {
+                        level = 1;
+                    } else {
+                        level = 0;
+                    }
+                }
+            }
+
+            function uselessHandler2() {
+                $('#chartServ').css('cursor', 'pointer')
+            }
+            function uselessHandler3() {
+                $('#chartServ').css('cursor', 'default')
+            }
+        }
+
+        function drawAnios() {
+            var jsonData = $.ajax({
+                url: "@(Url.Action("getChartAnual"))",
+                dataType: "json",
+                async: false
+            }).responseText;
+            var data = new google.visualization.DataTable(jsonData);
+            var formatter = new google.visualization.NumberFormat(
+                { suffix: '€', decimalSymbol: ',' });
+            formatter.format(data, 1);
+            formatter.format(data, 2);
+
+            var options = {
+                title: 'Producción mensual Año/Mes',
+                backgroundColor: '#272B30',
+                colors: ['#ED480F', '#0F6AED'],
+                curveType: 'function',
+                chartArea: {
+                    backgroundColor: '#EAEDE2'
+                },
+                hAxis: {
+                    title: 'Número mes',
+                    minValue: 0,
+                    textStyle: {
+                        color: '#d9d9d9'
+                    },
+                    titleTextStyle: {
+                        color: '#d9d9d9'
+                    },
+                    gridlines: {
+                        color: '#d9d9d9'
+                    }
+                },
+                vAxis: {
+                    title: 'Producción (€)',
+                    textStyle: {
+                        color: '#d9d9d9'
+                    },
+                    titleTextStyle: {
+                        color: '#d9d9d9'
+                    },
+                    gridlines: {
+                        color: '#d9d9d9'
+                    }
+                },
+                titleTextStyle: {
+                    color: '#d9d9d9',
+                    bold: true
+                },
+                legend: {
+                    textStyle: {
+                        color: '#d9d9d9'
+                    },
+                    position: 'top'
+                }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chartAnios'))
+            chart.draw(data, options);
+        }
+
+    </script>
+}

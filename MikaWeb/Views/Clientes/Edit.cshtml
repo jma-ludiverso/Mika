@@ -1,0 +1,58 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelCliente
+
+@{
+    ViewData["Title"] = "Inicio - Clientes - Modificar Cliente";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index">Clientes</a></li>
+    <li class="breadcrumb-item active">Modificar Cliente</li>
+</ol>
+<hr />
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-sm-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Cliente.Nombre" class="control-label"></label>
+                <input asp-for="Cliente.Nombre" class="form-control form-control-sm" autocomplete="off" required maxlength="50" />
+                <span asp-validation-for="Cliente.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cliente.Telefono" class="control-label"></label>
+                <input asp-for="Cliente.Telefono" class="form-control form-control-sm" autocomplete="off" maxlength="50" />
+                <span asp-validation-for="Cliente.Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cliente.Email" class="control-label"></label>
+                <input asp-for="Cliente.Email" class="form-control form-control-sm" autocomplete="off" maxlength="50" />
+                <span asp-validation-for="Cliente.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div style="text-align: right;">
+                    <input type="hidden" asp-for="Cliente.IdSalon" />
+                    <input type="hidden" asp-for="Cliente.IdCliente" />
+                    <input type="submit" value="Guardar" class="btn btn-secondary btn-sm" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <partial name="Tintura" model="@Model" />
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $(".close").click(datosBorrar);
+        });
+
+        function datosBorrar(data) {
+            $('#hdBorrar').val($(this).data("id"));
+        }
+    </script>
+}

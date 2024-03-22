@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MikaWeb.Models.Empleado>
+@{
+    ViewData["Title"] = "Gestión - Empleados";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Gestion">Gestión</a></li>
+    <li class="breadcrumb-item active">Empleados</li>
+</ol>
+<div class="row">
+    <div class="col-md-12">
+        <form method="get">
+            <button id="update-service-button" class="btn btn-secondary btn-sm" asp-area="Identity" asp-page="/Account/Register">Nuevo empleado</button><br /><br />
+        </form>
+        <table id="test-registers" class="table" style="background-color: dimgray">
+            <thead class="table-primary">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Codigo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Apellidos)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Activo)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Administrador)
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+@section Scripts{
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/empleados.js" asp-append-version="true"></script>
+
+}

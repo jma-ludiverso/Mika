@@ -1,0 +1,32 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelCaja
+@{
+    Layout = null;
+}
+<div class="row" style="margin-bottom:10px;">
+    <div class="col-sm-5 nopadding">
+        <label asp-for="LineaGasto.Concepto" class="control-label"></label>
+        <input id="descgasto" asp-for="LineaGasto.Concepto" class="form-control form-control-sm formsmall" autocomplete="off" required maxlength="50" />
+        <span asp-validation-for="LineaGasto.Concepto" class="text-danger"></span>
+    </div>
+    <div class="col-sm-3 nopadding">
+        <label asp-for="LineaGasto.Importe" class="control-label"></label>
+        <input id="importegasto" asp-for="LineaGasto.Importe" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+        <span asp-validation-for="LineaGasto.Importe" class="text-danger"></span>
+    </div>
+    <div class="col-sm-2 nopadding">
+        <label class="control-label">Iva (%): </label>
+        <input id="gastoIvaPorc" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+    </div>
+    <div class="col-sm-2 nopadding">
+        <label asp-for="LineaGasto.Iva" class="control-label"></label>
+        <input id="gastoIvaCant" asp-for="LineaGasto.Iva" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+        <span asp-validation-for="LineaGasto.Iva" class="text-danger"></span>
+    </div>
+</div>
+<div class="modal-footer" style="margin-right:-25px;margin-left:-15px;">
+    <input id="hdBorrar" type="hidden" asp-for="LineaGasto.NCaja" />
+    <input id="hdSalon" type="hidden" asp-for="LineaGasto.IdSalon" />
+    <input id="hdNLinea" type="hidden" asp-for="LineaGasto.Linea" />
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button id="guardaLinea" type="submit" class="btn btn-secondary btn-sm" asp-action="Caja" asp-route-acc="L">Guardar</button>
+</div>

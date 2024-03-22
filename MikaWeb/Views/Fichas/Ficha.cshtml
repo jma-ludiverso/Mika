@@ -1,0 +1,513 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MikaWeb.Areas.Identity.Data
+@model MikaWeb.Models.ViewModels.ViewModelFicha
+@inject UserManager<MikaWebUser> UserManager
+@{
+    ViewData["Title"] = "Ficha cliente";
+}
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form id="frmFicha" asp-action="Ficha">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+                <div class="card-header">
+                    <div>
+                        <i class="far fa-user"></i><span> Cliente</span>
+                        <div style="float:right;width:65%;">
+                            <input id="buscar" class="form-control form-control-sm formsmall" type="text" placeholder="buscar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="padding:0.25rem;">
+                    <div class="form-group">
+                        @Html.DropDownListFor(m => m.Datos.IdCliente, Model.Clientes, new { size = 5, @class = "form-control form-control-sm lstClientes" })
+                        <span asp-validation-for="Datos.IdCliente" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">
+                    <input id="NFicha" name="NFicha" type="hidden" asp-for="Datos.NFicha" />
+                    <input type="hidden" asp-for="Datos.NFicha" />
+                    <i class="far fa-file-alt"></i><strong> # Ficha @Model.Datos.NFicha </strong>
+                    <div class="form-group" style="display:-webkit-inline-flex;height:8px;">
+                        <div class='input-group date' id='txtFecha'>
+                            <input type='text' class="form-control form-control-sm formsmall" style="width:90px;text-align:center;font-weight:500;" asp-for="Datos.Fecha" />
+                            <span class="input-group-addon" style="margin-left:1px;text-align:center;width:25px;">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="padding:0.25rem;">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.DescuentoPorc" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="descuentoporc" asp-for="Datos.DescuentoPorc" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                    <span asp-validation-for="Datos.DescuentoPorc" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="TotalServicios" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input asp-for="TotalServicios" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="TotalServicios" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="TotalProductos" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="totalprod" asp-for="TotalProductos" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="TotalProductos" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.Base" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="base" asp-for="Datos.Base" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Datos.Base" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.TotalDescuentos" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="totaldesc" asp-for="Datos.TotalDescuentos" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Datos.TotalDescuentos" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.Iva" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="totaliva" asp-for="Datos.Iva" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Datos.Iva" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.Total" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="total" asp-for="Datos.Total" class="form-control form-control-sm formsmall" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Datos.Total" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.FormaPago" class="col-sm-6 control-label"></label>
+                                <input id="hdFormaPago" type="hidden" asp-for="Datos.FormaPago" />
+                                <div class="col-sm-6">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Tarjeta">
+                                        <label class="form-check-label" for="inlineRadio1" title="Pago con tarjeta"><i class="fas fa-credit-card"></i></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Efectivo">
+                                        <label class="form-check-label" for="inlineRadio2" title="Pago en efectivo"><i class="fas fa-coins"></i></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.Pagado" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="pagado" asp-for="Datos.Pagado" class="form-control form-control-sm formsmall jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                    <span asp-validation-for="Datos.Pagado" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0rem;">
+                                <label asp-for="Datos.Cambio" class="col-sm-6 control-label"></label>
+                                <div class="col-sm-6">
+                                    <input id="cambio" asp-for="Datos.Cambio" class="form-control form-control-sm formsmall jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" readonly />
+                                    <span asp-validation-for="Datos.Cambio" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div style="float:right;">
+                                <input id="hdEstado" type="hidden" asp-for="Datos.Cerrada" />
+                                @if (Model.Datos.Cerrada)
+                                {
+                                    @if ((await UserManager.GetUserAsync(User)).IsAdmin)
+                                    {
+                                        <button type="submit" class="btn btn-warning btn-sm" asp-route-acc="ROP">Reabrir ficha</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-secondary btn-sm" asp-route-acc="N" disabled>Guardar</button>
+                                        <button type="submit" class="btn btn-success btn-sm" asp-route-acc="S" disabled>Guardar y cerrar ficha</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-secondary btn-sm" asp-route-acc="N">Guardar</button>
+                                    <button type="submit" class="btn btn-success btn-sm" asp-route-acc="S">Guardar y cerrar ficha</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            @if (Model.Datos.IdCliente != 0)
+            {
+                <button id="historial" type="button" class="btn btn-secondary btn-sm" style="margin-bottom:10px" data-idcliente="@Model.Datos.IdCliente" data-toggle="modal" data-target="#historialModal"><i class="far fa-file-alt"></i> Historial cliente</button>
+                <span>&nbsp;&nbsp;</span>
+                <button id="historialfichas" type="button" class="btn btn-secondary btn-sm" style="margin-bottom:10px" data-toggle="modal" data-target="#historialFichasModal"><i class="far fa-file-alt"></i> Últimas fichas</button>
+            }
+        </div>
+        <div class="col-sm-6" style="text-align:right;">
+            <a asp-action="Print" asp-route-nficha="@Model.Datos.NFicha" asp-route-salon="@Model.Datos.IdSalon" target="_blank" class="btn btn-secondary btn-sm" style="background-image:url(../../img/icon_pdf.png),linear-gradient(#8a9196, #7A8288 60%, #70787d);width:100px;margin-top:-10px;">Ticket</a>
+            @if (Model.Datos.Cerrada)
+            {
+                <button id="nuevaLinea" type="button" class="btn btn-secondary btn-sm" style="margin-bottom:10px" data-nlinea="-1" disabled><i class="fa fa-plus"></i> Nueva línea</button>
+            }
+            else
+            {
+                <button id="nuevaLinea" type="button" class="btn btn-secondary btn-sm" style="margin-bottom:10px" data-nlinea="-1"><i class="fa fa-plus"></i> Nueva línea</button>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <table id="tbLineas" class="table" style="background-color: dimgray">
+                <thead class="table-primary">
+                    <tr>
+                        <th style="text-align: center;">#</th>
+                        <th style="text-align: center;">Empleado</th>
+                        <th style="text-align: center;">Tipo</th>
+                        <th style="text-align: center;">Descripcion</th>
+                        <th style="text-align: center;">Base(€)</th>
+                        <th style="text-align: center;">Descuento(%)</th>
+                        <th style="text-align: center;">Iva(%)</th>
+                        <th style="text-align: center;">Total(€)</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="modal" id="nuevalineaModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content text-white bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ficha cliente - Linea venta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="nuevaLinea-container" class="container-fluid">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="borralineaModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-light" style="color:black;">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Confirma que desea borrar la línea seleccionada?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Este cambio no podrá deshacerse</p>
+                    <input id="hdNLinea" type="hidden" asp-for="LineaTrabajo.Linea" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button id="borraLinea" type="submit" class="btn btn-secondary btn-sm" asp-action="Ficha" asp-route-acc="B">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="historialModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">Historial de tintura</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="/Views/Clientes/Tintura.cshtml" model="@Model.Historial" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="historialFichasModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content text-white" style="min-width:max-content;">
+                <div class="modal-header">
+                    <h5 class="modal-title">Últimas fichas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @await Component.InvokeAsync("Fichas", new { Id = Model.Datos.IdCliente })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker.min.css" />
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/fichas.js" asp-append-version="true"></script>
+
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="~/lib/momentjs/es.js"></script>
+
+    <script type="text/javascript">
+
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)?(?:,\d+)?$/.test(value);
+        }
+
+        $(function () {
+            $("#buscar").keyup(getClientes);
+            $("#descuentoporc").change(calculateDescuento);
+            $("#pagado").keyup(calculateChange);
+            $(".form-check-input").change(setFormaPago);
+            $("#nuevaLinea").click(nuevaLinea);
+            $(".close").click(datosBorrar);
+            $('#txtFecha').datetimepicker({
+                format: 'L',
+                locale: 'es'
+            });
+            $("#tbLineas tbody").on('click', '.nuevalinea', function (event) {
+                nuevaLinea($(this).data("id"));
+            });
+            $("#tbLineas tbody").on('click', '.borralinea', function (event) {
+                $('#hdNLinea').val($(this).data("id"));
+            });
+            getFormaPago();
+        });
+
+        //function borraLinea(id) {
+        //    $('#hdNLinea').val(id);
+        //}
+
+        function calculateChange(data) {
+            var total = parseFloat($('#total').val().replace(',', '.'));
+            var pagado = parseFloat($('#pagado').val().replace(',', '.'));
+            var cambio = pagado - total;
+            $('#cambio').val(cambio.toFixed(2).replace('.', ','));
+        }
+
+        function calculateDescuento(data) {
+            $("#frmFicha").attr("action", "Ficha?acc=D").submit();
+        }
+
+        function calculateDesc() {
+            var desc = parseFloat($('#DescPorc').val().replace(',', '.'));
+            var prec = parseFloat($('#Precio').val().replace(',', '.'));
+            if (isNaN(prec)) {
+                prec = 0;
+            }
+            if (isNaN(desc)) {
+                desc = 0;
+            }
+            var cantidad = prec * (desc / 100);
+            $('#hdDescant').val((cantidad).toFixed(2).replace('.', ','));
+            calculateIva();
+            calculatePVP();
+        }
+
+        function calculateFromPVP(e) {
+            if (e.which != 9) {
+                var prec = parseFloat($('#PVP').val().replace(',', '.'));
+                var iva = parseFloat($('#IvaPorc').val().replace(',', '.'));
+                if (isNaN(prec)) {
+                    prec = 0;
+                }
+                if (isNaN(iva)) {
+                    iva = 0;
+                }
+                var base = prec / ((iva / 100) + 1);
+                $('#Precio').val(base.toFixed(2).replace('.', ','));
+                $('#hdIvacant').val((prec - base).toFixed(3).replace('.', ','));
+                $('#DescPorc').val(0);
+                $('#hdDescant').val(0);
+            }
+        }
+
+        function calculateIva() {
+            var iva = parseFloat($('#IvaPorc').val().replace(',', '.'));
+            var prec = parseFloat($('#Precio').val().replace(',', '.'));
+            var desc = parseFloat($('#hdDescant').val().replace(',', '.'));
+            if (isNaN(prec)) {
+                prec = 0;
+            }
+            if (isNaN(iva)) {
+                iva = 0;
+            }
+            if (isNaN(desc)) {
+                desc = 0;
+            }
+            var cantidad = (prec - desc) * (iva / 100);
+            $('#hdIvacant').val((cantidad).toFixed(2).replace('.', ','));
+            calculatePVP();
+        }
+
+        function calculatePVP() {
+            var prec = parseFloat($('#Precio').val().replace(',', '.'));
+            var iva = parseFloat($('#hdIvacant').val().replace(',', '.'));
+            var desc = parseFloat($('#hdDescant').val().replace(',', '.'));
+            if (isNaN(prec)) {
+                prec = 0;
+            }
+            if (isNaN(iva)) {
+                iva = 0;
+            }
+            if (isNaN(desc)) {
+                desc = 0;
+            }
+            prec = prec - desc + iva;
+            $('#PVP').val((prec).toFixed(2).replace('.', ','));
+        }
+
+        function datosBorrar(data) {
+            $('#hdBorrar').val($(this).data("id"));
+        }
+
+        function getClientes(data) {
+            if ($('#buscar').val().length >= 3 || $('#buscar').val().length == 0) {
+                var buscado = $('#buscar').val();
+
+                $.ajax({
+                    url: "@(Url.Action("getClientes"))",
+                    data: { "search": buscado },
+                    success: function (data) {
+                        $('.lstClientes').empty();
+                        if (data.length > 0) {
+                            for (var i = 0; i <= data.length - 1; i++) {
+                                $('.lstClientes').append('<option value=' + data[i].idCliente + '>' + data[i].nombre + '</option>');
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+
+            }
+        }
+
+        function getEmpleados(data) {
+            if ($('#codigoemp').val().length == 2) {
+                var buscado = $('#codigoemp').val();
+                var salon = $('#hdSalon').val();
+
+                $.ajax({
+                    url: "@(Url.Action("getEmpleados"))",
+                    data: { "search": buscado, "salon": salon },
+                    success: function (data) {
+                        $('#nombreempleado').val(data);
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+
+            }
+        }
+
+        function getServicios(data) {
+            if ($('#codigoserv').val().length == 2) {
+                var buscado = $('#codigoserv').val();
+                var salon = $('#hdSalon').val();
+
+                $.ajax({
+                    url: "@(Url.Action("getServicios"))",
+                    data: { "search": buscado, "salon": salon },
+                    success: function (data) {
+                        $('#descserv').val(data.nombre);
+                        $('#hdIdServicio').val(data.idServicio);
+                        $('#hdTipo').val(data.tipo);
+                        $('#hdIvacant').val((data.ivaCant).toFixed(3).replace('.', ','));
+                        $('#IvaPorc').val((data.ivaPorc).toFixed(2).replace('.', ','));
+                        $('#Precio').val((data.precio).toFixed(3).replace('.', ','));
+                        $('#PVP').val((data.pvp).toFixed(2).replace('.', ','));
+                        $('#Producto').css('display', 'none');
+                        $('#Servicio').css('display', 'none');
+                        $('#' + data.tipo + '').css('display', 'block');
+                        if (data.tipo == "Producto") {
+                            $('#DescPorc').prop("disabled", true);
+                        } else {
+                            $('#DescPorc').prop("disabled", false);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+
+            }
+        }
+
+        function getFormaPago() {
+            var fp = $('#hdFormaPago').val();
+            if (fp == "" || fp == "Tarjeta") {
+                $('input:radio[name=inlineRadioOptions]')[0].checked = true;
+            } else {
+                $('input:radio[name=inlineRadioOptions]')[1].checked = true;
+            }
+        }
+
+        function nuevaLinea(p) {
+            var url = '/Fichas/AddOrEdit';
+            var nlinea = $(this).attr('data-nlinea');
+            if (typeof nlinea === "undefined") {
+                nlinea = p;
+            }
+            $.ajax({
+                url: url + '?nlinea=' + nlinea,
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(@Html.Raw(Json.Serialize(Model)))
+            }).done(function (res) {
+                $("#nuevaLinea-container").html(res);
+                $('#codigoemp').keyup(getEmpleados);
+                $('#codigoserv').keyup(getServicios);
+                $('#Precio').keyup(calculateDesc);
+                $('#DescPorc').keyup(calculateDesc);
+                $('#IvaPorc').keyup(calculateIva);
+                $('#PVP').keyup(calculateFromPVP);
+                $('#nuevalineaModal').modal('show');
+            });
+        }
+
+        function setFormaPago(data) {
+            $('#hdFormaPago').val($('input[name=inlineRadioOptions]:checked', '#frmFicha').val());
+        }
+
+
+    </script>
+}

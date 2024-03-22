@@ -1,0 +1,285 @@
+﻿@model MikaWeb.Models.Empleado_Comisiones
+@{
+    ViewData["Title"] = "Gestión - Empleados - Comisiones";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Gestion">Gestión</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Empleados">Empleados</a></li>
+    <li class="breadcrumb-item active">Comisiones</li>
+</ol>
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form id="frmComisiones" asp-action="Comisiones">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Comisiones empleado: </strong>@Model.Codigo-@Model.Empleado
+            <input type="hidden" asp-for="Codigo" />
+            <input type="hidden" asp-for="Empleado" />
+            <input type="hidden" asp-for="IdSalon" />
+            <input type="hidden" asp-for="IdEmpresa" />
+        </div>
+        <br /><br />
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <table id="tbComisiones" class="table" style="background-color: dimgray">
+                <thead class="table-primary">
+                    <tr>
+                        <th style="text-align:center;">Tipo</th>
+                        <th style="text-align:center;">Descripcion</th>
+                        <th style="text-align:center;">Com.P1 (%)</th>
+                        <th style="text-align:center;">Com.P2 (%)</th>
+                        <th style="text-align:center;">Com.P3 (%)</th>
+                        <th style="text-align:center;">Com.P4 (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i <= Model.Comisiones.Count - 1; i++)
+                    {
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(m => m.Comisiones[i].IdServicio)
+                            @Html.HiddenFor(m => m.Comisiones[i].Tipo)
+                            @if (Model.Comisiones[i].Tipo.Equals("Producto"))
+                            {
+                                <div style="text-align: center;"><i class="fab fa-product-hunt" title="Venta producto"></i></div>
+                            }
+                            else
+                            {
+                                <div style="text-align: center;"><i class="fas fa-cut" title="Servicio"></i></div>
+                            }
+                        </td>
+                        <td>
+                            @Html.HiddenFor(m => m.Comisiones[i].Descripcion)
+                            <div style="text-align: left;">@Model.Comisiones[i].Descripcion</div>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Comisiones[i].ComisionP1, new { Class = "form-control form-control-sm jscomision", Style = "text-align: right;" })
+                            @Html.ValidationMessageFor(m => m.Comisiones[i].ComisionP1, null, new { Class = "text-danger" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Comisiones[i].ComisionP2, new { Class = "form-control form-control-sm jscomision", Style = "text-align: right;" })
+                            @Html.ValidationMessageFor(m => m.Comisiones[i].ComisionP2, null, new { Class = "text-danger" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Comisiones[i].ComisionP3, new { Class = "form-control form-control-sm jscomision", Style = "text-align: right;" })
+                            @Html.ValidationMessageFor(m => m.Comisiones[i].ComisionP3, null, new { Class = "text-danger" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Comisiones[i].ComisionP4, new { Class = "form-control form-control-sm jscomision", Style = "text-align: right;" })
+                            @Html.ValidationMessageFor(m => m.Comisiones[i].ComisionP4, null, new { Class = "text-danger" })
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">% Comisiones por defecto</h4>
+                    <table>
+                        <tr>
+                            <td><span><i class="fas fa-cut" title="Servicio"></i> Servicios - Lavado:</span></td>
+                            <td style="text-align:center;width:60px;">P1</td>
+                            <td style="text-align:center;width:60px;">P2</td>
+                            <td style="text-align:center;width:60px;">P3</td>
+                            <td style="text-align:center;width:60px;">P4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Producción (€):</tdstyle="text-align:right;">
+                            <td>
+                                <input asp-for="ServicioLE1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLE1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioLE2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLE2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioLE3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLE3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioLE4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLE4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Comision (%):</td>
+                            <td>
+                                <input asp-for="ServicioLP1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLP1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioLP2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLP2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioLP3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLP3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioLP4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioLP4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span><i class="fas fa-cut" title="Servicio"></i> Servicios - Servicios:</span></td>
+                            <td style="text-align:center;">P1</td>
+                            <td style="text-align:center;">P2</td>
+                            <td style="text-align:center;">P3</td>
+                            <td style="text-align:center;">P4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Producción (€):</td>
+                            <td>
+                                <input asp-for="ServicioSE1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSE1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioSE2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSE2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioSE3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSE3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioSE4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSE4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Comision (%):</td>
+                            <td>
+                                <input asp-for="ServicioSP1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSP1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioSP2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSP2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioSP3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSP3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioSP4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioSP4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span><i class="fas fa-cut" title="Servicio"></i> Servicios - Técnicos:</span></td>
+                            <td style="text-align:center;">P1</td>
+                            <td style="text-align:center;">P2</td>
+                            <td style="text-align:center;">P3</td>
+                            <td style="text-align:center;">P4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Producción (€):</td>
+                            <td>
+                                <input asp-for="ServicioTE1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTE1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioTE2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTE2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioTE3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTE3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioTE4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTE4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Comision (%):</td>
+                            <td>
+                                <input asp-for="ServicioTP1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTP1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioTP2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTP2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioTP3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTP3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ServicioTP4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ServicioTP4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span><i class="fab fa-product-hunt" title="Venta producto"></i> Productos:</span></td>
+                            <td style="text-align:center;">P1</td>
+                            <td style="text-align:center;">P2</td>
+                            <td style="text-align:center;">P3</td>
+                            <td style="text-align:center;">P4</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Producción (€):</td>
+                            <td>
+                                <input asp-for="ProductoE1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoE1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductoE2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoE2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductoE3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoE3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductoE4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoE4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">Comision (%):</td>
+                            <td>
+                                <input asp-for="ProductoP1" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoP1" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductoP2" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoP2" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductoP3" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoP3" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="ProductoP4" class="form-control form-control-sm jsprecio" style="text-align:right;" asp-format="{0}" autocomplete="off" />
+                                <span asp-validation-for="ProductoP4" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="text-align:right;margin-top:10px;">
+                        <button type="submit" class="btn btn-secondary btn-sm" asp-action="Comisiones" asp-route-acc="A">Aplicar a todos</button>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right; padding: 1.25rem;">
+                <button type="submit" class="btn btn-success btn-sm" asp-action="Comisiones">Guardar comisiones</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)?(?:,\d+)?$/.test(value);
+        }
+
+    </script>
+}

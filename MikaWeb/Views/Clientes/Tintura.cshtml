@@ -1,0 +1,59 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelCliente
+@if (Model.MuestraCabecera)
+{
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">@Model.Cliente.Nombre</li>    
+</ol>
+<input id="hdCliente" type="hidden" asp-for="Cliente.IdCliente" />
+<input id="hdNFicha" type="hidden" asp-for="FichaRef" />
+}
+<div class="form-group">
+    <label asp-for="NuevaHistoria" class="control-label"></label>
+    <input asp-for="NuevaHistoria" class="form-control form-control-sm" autocomplete="off" maxlength="50" />
+    <span asp-validation-for="NuevaHistoria" class="text-danger"></span>
+</div>
+<div style="text-align:right;padding-bottom:15px;">
+    <input type="hidden" asp-for="MuestraCabecera" />
+    @if (Model.Cliente.IdCliente != 0)
+    {
+        <button id="add" type="submit" class="btn btn-secondary btn-sm" asp-action="Historia"><i class="far fa-plus-square"></i> Añadir</button>
+    }
+    else
+    {
+        <span><i class="far fa-plus-square"></i> Añadir</span>
+    }
+</div>
+<div class="form-group">
+    <ul style="height:200px;overflow:auto;background-color:white;padding:inherit;color:#52575C;">
+        @if (Model.Historial != null)
+        {
+            foreach (Cliente_Historia c in Model.Historial)
+            {
+                <li style="display: block;font-weight: 500;">
+                    <button type="button" class="close" style="float:left;padding-right:10px;" title="Borrar historia" data-toggle="modal" data-target="#eliminar" data-id="@c.IdHistoria">&times;</button>
+                    @c.Fecha.ToShortDateString()  - @c.Descripcion
+                </li>
+            }
+        }
+    </ul>
+</div>
+<div class="modal" id="eliminar">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-light" style="color:black;">
+            <div class="modal-header">
+                <h5 class="modal-title">¿Confirma que desea borrar el apunte seleccionado?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Este cambio no podrá deshacerse</p>
+                <input id="hdBorrar" type="hidden" asp-for="IdBorrar" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button id="borrar" type="submit" class="btn btn-secondary btn-sm" formnovalidate asp-action="Historia" asp-route-deleteId="S">Borrar</button>
+            </div>
+        </div>
+    </div>
+</div>

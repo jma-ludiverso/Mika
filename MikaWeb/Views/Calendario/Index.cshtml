@@ -1,0 +1,103 @@
+﻿@model IEnumerable<MikaWeb.Models.Calendario>
+@{
+    ViewData["Title"] = "Inicio - Calendario";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group row">
+            <div class="col-sm-4">
+                <div class="btn-group" role="group" aria-label="Meses">
+                    <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Calendario")?mesref=@Model.First().MesCargado.Year@MikaWeb.Extensions.Utils.FormatoFecha((Model.First().MesCargado.Month-1).ToString())'"><i class="far fa-hand-point-left"></i> Mes anterior</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="alert alert-dismissible alert-light" style="text-align:center">
+                    <strong>@MikaWeb.Extensions.Utils.NombreMes(Model.First().MesCargado.Month) @Model.First().MesCargado.Year</strong> - Citas del mes
+                </div>
+            </div>
+            <div class="col-sm-4" style="text-align:right">
+                <div class="btn-group" role="group" aria-label="Meses">
+                    <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Calendario")?mesref=@Model.First().MesCargado.Year@MikaWeb.Extensions.Utils.FormatoFecha((Model.First().MesCargado.Month+1).ToString())'">Mes siguiente <i class="far fa-hand-point-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-12">
+                <table id="tbMes" class="table table-hover" style="table-layout:fixed;">
+                    <thead class="alert alert-light">
+                        <tr>
+                            <th style="text-align:center">Lunes</th>
+                            <th style="text-align:center">Martes</th>
+                            <th style="text-align:center">Miércoles</th>
+                            <th style="text-align:center">Jueves</th>
+                            <th style="text-align:center">Viernes</th>
+                            <th style="text-align:center">Sábado</th>
+                            <th style="text-align:center">Domingo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            @if (item.DiaSemana == "Lunes")
+                            {
+                                @Html.Raw("<tr>");
+                            }
+                    <td>
+                        @if (item.DiaSemana == "Domingo")
+                        {
+                            @Html.Raw("<div class='card text-white bg-secondary mb-3' style='max-width: 20rem;'>");
+                        }
+                        else
+                        {
+                            @if (item.Citas.Count > 0)
+                            {
+                                @Html.Raw("<div class='card text-white bg-info mb-3' style='max-width: 20rem;'>");
+                            }
+                            else
+                            {
+                                @Html.Raw("<div class='card text-white bg-light mb-3' style='max-width: 20rem;'>");
+                            }
+                        }
+                        @if (item.AdmiteCitas)
+                        {
+                            <div class="card-header"><a asp-action="Citas" asp-route-fecha="@item.Fecha.ToShortDateString()" class="alert-link">Día @item.Fecha.Day.ToString()/@MikaWeb.Extensions.Utils.FormatoFecha(item.Fecha.Month.ToString())</a></div>
+                        }
+                        else
+                        {
+                            <div class="card-header">Día @item.Fecha.Day.ToString()/@MikaWeb.Extensions.Utils.FormatoFecha(item.Fecha.Month.ToString())</div>
+                        }
+                        <div class="card-body">
+                            @if (item.Citas.Count() == 0)
+                            {
+                                <br />
+                            }
+                            else
+                            {
+                                foreach (var emp in item.Citas)
+                                {
+                                    <a asp-action="Citas" asp-route-fecha="@item.Fecha.ToShortDateString()" asp-route-emp="@emp.CodigoEmpleado" class="alert-link" style="color: #272B30;font-size: 0.7rem;"><i class="far fa-clock"></i> @emp.CodigoEmpleado @emp.Empleado @Html.Raw("(" + @emp.Citas.Count() + " citas)")</a> <br />;
+                                }
+                            }
+                            @if (item.AdmiteCitas)
+                            {
+                                <a asp-action="Citas" asp-route-fecha="@item.Fecha.ToShortDateString()" class="alert-link" style="color: #272B30;"><i class="far fa-calendar-alt"></i> Nueva cita</a>
+                            }
+                            else
+                            {
+                                <br />
+                            }
+                        </div>
+                        @Html.Raw("</div");
+                    </td>
+                                @if (item.DiaSemana == "Domingo")
+                                {
+                                    @Html.Raw("</tr>");
+                                }
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelServicios
+@{
+    ViewData["Title"] = "Gestión - Servicios";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Gestion">Gestión</a></li>
+    <li class="breadcrumb-item active">Servicios</li>
+</ol>
+<div class="row">
+    <div class="col-md-12">
+        <button id="update-service-button" class="btn btn-secondary btn-sm" onclick="location.href='@Url.Action("Nuevo", "Servicios")'">Nuevo servicio</button><br /><br />
+        <form id="SoloAcivos" method="post" asp-action="Index">
+            <div class="custom-control custom-switch">
+                <input id="SoloActivos" asp-for="SoloActivos" type="checkbox" class="custom-control-input jssoloactivos" name="SoloActivos" />
+                <label class="custom-control-label" for="SoloActivos">Mostrar solo activos</label>
+            </div>
+        </form>
+        <table id="tbServicios" class="table" style="background-color: dimgray">
+            <thead class="table-primary">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Servicio.IdServicio)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.Codigo)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.Tipo)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.Grupo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Servicio.Nombre)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.Precio)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.IvaPorc)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.IvaCant)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.PVP)
+                    </th>
+                    <th style="text-align: center;">
+                        @Html.DisplayNameFor(model => model.Servicio.Activo)
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+}
+
+@section Scripts{
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datetime-moment/datetime-moment.js" asp-append-version="true"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+
+    <script src="~/js/servicios.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $(".jssoloactivos").click(soloActivos);
+        });
+
+        function soloActivos() {
+            var table = $('#tbServicios').DataTable({
+                retrieve: true,
+                ajax: "data.json"
+            });
+            table.ajax.reload(null,false);
+        }
+
+    </script>
+}

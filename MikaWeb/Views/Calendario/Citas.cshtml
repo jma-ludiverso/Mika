@@ -1,0 +1,206 @@
+﻿@model MikaWeb.Models.ViewModels.ViewModelCitas
+@{
+    ViewData["Title"] = "Inicio - Calendario - Citas";
+}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Inicio</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index">Calendario</a></li>
+    <li class="breadcrumb-item active">Citas</li>
+</ol>
+<hr />
+<partial name="_StatusMessage" model="@ViewBag.StatusMessage" />
+<form asp-action="Citas">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-dismissible alert-light" style="text-align:center">
+                <strong>@Model.Dia.DiaSemana @Model.Dia.Fecha.ToShortDateString()</strong>
+                <input type="hidden" asp-for="Dia.Fecha" />
+                <input type="hidden" asp-for="FiltroEmpleado" />
+                <input type="hidden" asp-for="Salon" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <div class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+                        <div class="card-header">Nueva cita</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="card-title">Cliente:</label>
+                                <div class="form-group">
+                                    <input id="buscar" class="form-control form-control-sm" type="text" placeholder="buscar">
+                                </div>
+                                @Html.DropDownListFor(m => m.NuevaCitaCliente, Model.Clientes, new { size = 5, @class = "form-control form-control-sm lstClientes" })
+                                <span asp-validation-for="NuevaCitaCliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevaCitaNoregistrado" class="control-label"></label>
+                                <input asp-for="NuevaCitaNoregistrado" class="form-control form-control-sm" autocomplete="off" />
+                                <span asp-validation-for="NuevaCitaNoregistrado" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="card-text">Empleado:</label>
+                                @Html.DropDownListFor(m => m.NuevaCitaEmpleado, Model.Empleados, new { @class = "form-control form-control-sm", required = (string)null })
+                                <span asp-validation-for="NuevaCitaEmpleado" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label asp-for="NuevaCitaHora" class="control-label"></label>
+                                    <input asp-for="NuevaCitaHora" class="form-control form-control-sm" autocomplete="off" required maxlength="2" />
+                                    <span asp-validation-for="NuevaCitaHora" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label asp-for="NuevaCitaMinutos" class="control-label"></label>
+                                    <input asp-for="NuevaCitaMinutos" class="form-control form-control-sm" autocomplete="off" required maxlength="2" />
+                                    <span asp-validation-for="NuevaCitaMinutos" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevaCitaNotas" class="control-label"></label>
+                                <textarea asp-for="NuevaCitaNotas" class="form-control form-control-sm" autocomplete="off" rows="5"></textarea>
+                                <span asp-validation-for="NuevaCitaNotas" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div style="text-align: right;">
+                                    <input type="submit" value="Guardar" class="btn btn-secondary btn-sm" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <table id="tbComisiones" class="table" style="background-color: dimgray">
+                @for (int f = -1; f <= Model.Dia.Horas.Count - 1; f++)
+                {
+                    @if (f == -1)
+                    {
+                        //cabecera de la tabla
+                        @Html.Raw("<thead style='background-color:#515960'><tr>")
+                    }
+                    @Html.Raw("<tr>")
+                    @for (int c = -1; c <= Model.Dia.Citas.Count - 1; c++)
+                    {
+                        @if (f == -1)
+                        {
+                            //cabecera de la tabla
+                            @if (c == -1)
+                            {
+                                <td style="width:80px;text-align:center;">hh:mm</td>
+                            }
+                            else
+                            {
+                                <td style="border-left: 1px solid;border-right: 1px solid;text-align: center">@Model.Dia.Citas[c].CodigoEmpleado - @Model.Dia.Citas[c].Empleado <span class="badge badge-primary badge-pill">@Model.Dia.Citas[c].Citas.Count.ToString() cita/s</span></td>
+                            }
+                        }
+                        else
+                        {
+                            @if (c == -1)
+                            {
+                                <td style="text-align:center;">@Model.Dia.Horas[f].Hora</td>
+                            }
+                            else
+                            {
+                                <td style="border-left: 1px solid;border-right: 1px solid;">
+                                    @foreach (Calendario_Cita cita in Model.Dia.Citas[c].Citas)
+                                    {
+                                        if (int.Parse(cita.Hora.Replace(":", "")) >= Model.Dia.Horas[f].Inicio && int.Parse(cita.Hora.Replace(":", "")) < Model.Dia.Horas[f].Fin)
+                                        {
+                                            <div class="card bg-light mb-3" style="max-width: 20rem;">
+                                                <div class="card-body">
+                                                    <div>
+                                                        <a asp-controller="Fichas" asp-action="Ficha" asp-route-cli="@cita.Cliente.IdCliente" class="alert-link" style="color: #272B30;"><i class="far fa-clock"></i> @cita.Cliente.Nombre - @cita.Hora</a>
+                                                        <div style="float:right;">
+                                                            <button type="button" class="close" title="Borrar cita" data-toggle="modal" data-target="#eliminar" data-id="@cita.Cliente.IdCliente" data-h="@cita.Hora" data-emp="@Model.Dia.Citas[c].CodigoEmpleado">&times;</button>
+                                                        </div>
+                                                    </div>
+                                                    <span style="color: #272B30;">Teléfono: @cita.Cliente.Telefono</span><br />
+                                                    <span style="color: #272B30;">Notas: @cita.Notas</span>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                            }
+                        }
+                    }
+                    @Html.Raw("</tr>")
+                    @if (f == -1)
+                    {
+                        //cabecera de la tabla
+                        @Html.Raw("</thead><tbody>")
+                    }
+                }
+                @Html.Raw("</tbody>")
+            </table>
+        </div>
+    </div>
+    <div class="modal" id="eliminar">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-light" style="color:black;">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Confirma que desea borrar la cita seleccionada?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Este cambio no podrá deshacerse</p>
+                    <input id="hdBorrar" type="hidden" asp-for="DatosBorrar" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button id="borrar" type="submit" class="btn btn-secondary btn-sm" formnovalidate asp-route-borrar="S">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+
+    <script type="text/javascript">
+        $(function () {
+            $("#buscar").keyup(getClientes);
+            $(".close").click(datosBorrar);
+        });
+
+        function datosBorrar(data) {
+            var cliente = $(this).data("id");
+            var hora = $(this).data("h");
+            var emp = $(this).data("emp");
+            $('#hdBorrar').val(cliente + ";" + hora + ";" + emp);
+        }
+
+        function getClientes(data) {
+            if ($('#buscar').val().length >= 3 || $('#buscar').val().length == 0) {
+                var buscado = $('#buscar').val();
+
+                $.ajax({
+                    url: "@(Url.Action("getClientes"))",
+                    data: { "search": buscado },
+                    success: function (data) {
+                        $('.lstClientes').empty();
+                        if (data.length > 0) {
+                            for (var i = 0; i <= data.length - 1; i++){
+                                $('.lstClientes').append('<option value=' + data[i].idCliente + '>' + data[i].nombre + '</option>');
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+
+            }
+        }
+
+    </script>
+}
+
