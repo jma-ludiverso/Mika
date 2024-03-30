@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize(Policy = "AdminArea")]
+    [Authorize(AuthenticationSchemes = "Identity.Application", Policy = "AdminArea")]
     public class GestionController : Controller
     {
 

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize(Policy = "AdminArea")]
+    [Authorize(AuthenticationSchemes = "Identity.Application", Policy = "AdminArea")]
     public class GestoriaController : Controller
     {
 
