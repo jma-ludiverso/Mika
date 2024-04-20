@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MikaApp</string>
+
+    <string name="api_url">https://test.ludiverso.com/api/Resources/</string>
+</resources>
