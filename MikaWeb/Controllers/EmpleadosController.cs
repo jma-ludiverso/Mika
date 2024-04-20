@@ -18,7 +18,7 @@ using MikaWeb.Models.AuxiliaryModels;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize(Policy = "AdminArea")]
+    [Authorize(AuthenticationSchemes = "Identity.Application", Policy = "AdminArea")]
     public class EmpleadosController : Controller
     {
 

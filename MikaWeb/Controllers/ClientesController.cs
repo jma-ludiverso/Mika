@@ -18,7 +18,7 @@ using MikaWeb.Models.ViewModels;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class ClientesController : Controller
     {
         private readonly ILogger<ClientesController> _logger;

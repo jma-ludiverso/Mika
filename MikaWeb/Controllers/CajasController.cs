@@ -20,7 +20,7 @@ using MikaWeb.Models.ViewModels;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class CajasController : Controller
     {
 

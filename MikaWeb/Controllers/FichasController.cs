@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class FichasController : Controller
     {
 

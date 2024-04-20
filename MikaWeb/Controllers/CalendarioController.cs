@@ -21,7 +21,7 @@ using MikaWeb.Models.ViewModels;
 
 namespace MikaWeb.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application")]
     public class CalendarioController : Controller
     {
         private readonly ILogger<CalendarioController> _logger;
