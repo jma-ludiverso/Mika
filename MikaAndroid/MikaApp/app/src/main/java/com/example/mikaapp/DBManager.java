@@ -1,6 +1,8 @@
 package com.example.mikaapp;
 
 import java.io.IOException;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -63,6 +65,29 @@ public class DBManager {
 
             //TODO
             //insertar los datos recibidos en la BD
+
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public void InsertUser(AuthenticateResponse data){
+        try{
+            //insertar los datos del usuario
+            ContentValues values = new ContentValues();
+            values.put(DBStructure.USUARIOS_ID, data.userData.id);
+            values.put(DBStructure.USUARIOS_USERNAME, data.userData.userName);
+            values.put(DBStructure.USUARIOS_EMAIL, data.userData.email);
+            values.put(DBStructure.USUARIOS_SECURITYSTAMP, data.token);
+            values.put(DBStructure.USUARIOS_PHONENUMBER, data.userData.phoneNumber);
+            values.put(DBStructure.USUARIOS_ACTIVO, data.userData.activo);
+            values.put(DBStructure.USUARIOS_APELLIDOS, data.userData.apellidos);
+            values.put(DBStructure.USUARIOS_NOMBRE, data.userData.nombre);
+            values.put(DBStructure.USUARIOS_ISADMIN, data.userData.isAdmin);
+            values.put(DBStructure.USUARIOS_CODIGO, data.userData.codigo);
+            values.put(DBStructure.USUARIOS_SALON, data.userData.salon);
+
+            mDb.insert(DBStructure.TABLE_USUARIOS, null, values);
 
         }catch (Exception ex){
             throw ex;

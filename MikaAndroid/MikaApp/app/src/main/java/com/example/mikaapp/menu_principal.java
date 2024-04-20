@@ -30,7 +30,6 @@ public class menu_principal extends AppCompatActivity {
                 req.salon = ActiveData.loginData.userData.salon;
                 sync.getData(req);
             }catch (Exception ex){
-                //TODO
                 //Mostrar mensaje de error
                 Toast.makeText(menu_principal.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }

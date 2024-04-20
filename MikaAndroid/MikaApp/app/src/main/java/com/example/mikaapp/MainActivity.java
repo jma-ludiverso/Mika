@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     AuthenticateResponse resp = new Gson().fromJson(response.toString(), AuthenticateResponse.class);
                     if (resp.succeeded) {
-                        ActiveData.setLoginData(resp);
                         ActiveData.sincronizar = true;
+                        ActiveData.setLoginData(resp, getApplicationContext());
                         // Crear un Intent para iniciar la actividad del menú principal
                         Intent intent = new Intent(MainActivity.this, menu_principal.class);
                         //intent.putExtra("loginData", resp);

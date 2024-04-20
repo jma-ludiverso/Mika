@@ -43,7 +43,6 @@ public class Sincronizacion {
                     DatosMika data = new Gson().fromJson(response.toString(), DatosMika.class);
 
                     DBManager mDbHelper = new DBManager(ctxt);
-                    mDbHelper.createDatabase();
                     mDbHelper.open();
 
                     //Cursor testdata = mDbHelper.getTestData();
