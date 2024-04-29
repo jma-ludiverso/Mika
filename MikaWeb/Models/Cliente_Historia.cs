@@ -8,6 +8,7 @@ namespace MikaWeb.Models
         public int IdHistoria { get; set; }
         public DateTime Fecha { get; set; }
         public string Descripcion { get; set; }
+        public bool Nueva { get; set; }
         
     }
 }

@@ -25,6 +25,7 @@ namespace MikaWeb.Data
             // Add your customizations after calling base.OnModelCreating(builder);
             builder.Entity<Cajas>().HasKey(c => new { c.NCaja, c.IdSalon });
             builder.Entity<Cliente>().HasKey(c => new { c.IdCliente });
+            builder.Entity<Cliente_Historia>().HasKey(c => new { c.IdHistoria});
             builder.Entity<Cajas_Gastos>().HasKey(g => new { g.NCaja, g.IdSalon, g.Linea });
             builder.Entity<Servicio>().HasKey(s => new { s.IdServicio, s.IdEmpresa});
         }

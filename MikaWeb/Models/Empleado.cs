@@ -9,6 +9,8 @@
         public string Email { get; set; }
         public bool Activo { get; set; }
         public bool Administrador { get; set; }
+        public string PhoneNumber { get; set; }
         public int Salon { get; set; }
+        public string UserName { get; set; }
     }
 }
