@@ -46,25 +46,46 @@ public class DBManager {
         mDbHelper.close();
     }
 
-    public Cursor getTestData() {
+    public Cursor getData(String sql, String[] args) {
         try {
-            String sql ="SELECT * FROM Empresas";
-            Cursor mCur = mDb.rawQuery(sql, null);
+            Cursor mCur = mDb.rawQuery(sql, args);
             if (mCur != null) {
                 mCur.moveToNext();
             }
             return mCur;
         } catch (SQLException mSQLException) {
-            //Log.e(TAG, "getTestData >>"+ mSQLException.toString());
             throw mSQLException;
+        }
+    }
+
+    public void CierraSesion(String id){
+        try{
+            ContentValues values = new ContentValues();
+            values.put(DBStructure.USUARIOS_SECURITYSTAMP, "");
+            mDb.update(DBStructure.TABLE_USUARIOS, values, DBStructure.USUARIOS_ID + "=?", new String[]{id});
+            mDb.close();
+
+        }catch (Exception ex){
+            throw ex;
         }
     }
 
     public void InsertData(DatosMika data){
         try{
 
-            //TODO
             //insertar los datos recibidos en la BD
+            ContentValues values = new ContentValues();
+            values.put(DBStructure.EMPRESAS_IDEMPRESA, data.datosEmpresa.idEmpresa);
+            values.put(DBStructure.EMPRESAS_NOMBRE, data.datosEmpresa.nombre);
+            values.put(DBStructure.EMPRESAS_CIF, data.datosEmpresa.cif);
+            values.put(DBStructure.EMPRESAS_DIRECCION, data.datosEmpresa.direccion);
+            values.put(DBStructure.EMPRESAS_CP, data.datosEmpresa.cp);
+            values.put(DBStructure.EMPRESAS_CIUDAD, data.datosEmpresa.ciudad);
+            values.put(DBStructure.EMPRESAS_TELEFONO, data.datosEmpresa.telefono);
+            values.put(DBStructure.EMPRESAS_EMAIL, data.datosEmpresa.email);
+
+            mDb.insert(DBStructure.TABLE_EMPRESAS, null, values);
+
 
         }catch (Exception ex){
             throw ex;
@@ -87,7 +108,12 @@ public class DBManager {
             values.put(DBStructure.USUARIOS_CODIGO, data.userData.codigo);
             values.put(DBStructure.USUARIOS_SALON, data.userData.salon);
 
-            mDb.insert(DBStructure.TABLE_USUARIOS, null, values);
+            long result = mDb.insert(DBStructure.TABLE_USUARIOS, null, values);
+            if(result==-1){
+                values = new ContentValues();
+                values.put(DBStructure.USUARIOS_SECURITYSTAMP, data.token);
+                mDb.update(DBStructure.TABLE_USUARIOS, values, DBStructure.USUARIOS_ID + "=?", new String[]{data.userData.id});
+            }
 
         }catch (Exception ex){
             throw ex;

@@ -13,7 +13,6 @@ public class ActiveData {
         if(sincronizar){
             try{
                 DBManager mDbHelper = new DBManager(ctxt);
-                mDbHelper.createDatabase();
                 mDbHelper.open();
 
                 mDbHelper.InsertUser(data);

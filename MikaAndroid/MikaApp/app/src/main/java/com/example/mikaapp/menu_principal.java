@@ -25,7 +25,7 @@ public class menu_principal extends AppCompatActivity {
 
         if(ActiveData.sincronizar){
             try{
-                Sincronizacion sync = new Sincronizacion(getString(R.string.api_url), ActiveData.loginData.token, getApplicationContext());
+                Sincronizacion sync = new Sincronizacion(getString(R.string.api_url), ActiveData.loginData.token, getApplicationContext(), ActiveData.loginData.userData.userName);
                 DataRequest req = new DataRequest();
                 req.salon = ActiveData.loginData.userData.salon;
                 sync.getData(req);
@@ -38,7 +38,21 @@ public class menu_principal extends AppCompatActivity {
 
 
     public void ir_cerrar_sesion(View v){
-        finish();
+        try{
+            DBManager dbManager = new DBManager(getApplicationContext());
+            dbManager.open();
+            dbManager.CierraSesion(ActiveData.loginData.userData.id);
+            dbManager.close();
+
+            Toast.makeText(menu_principal.this, "Sesión cerrada correctamente", Toast.LENGTH_SHORT).show();
+
+            // Redirigir a la actividad de inicio de sesión
+            Intent intent = new Intent(menu_principal.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (Exception ex) {
+            Toast.makeText(menu_principal.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void ir_agregar_usuario(View v){

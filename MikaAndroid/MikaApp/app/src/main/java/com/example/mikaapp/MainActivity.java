@@ -3,8 +3,10 @@ package com.example.mikaapp;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -40,39 +42,82 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        userName = findViewById(R.id.txtEmail);
-        password = findViewById(R.id.txtCotrasena);
-        btnIniciar = findViewById(R.id.b_IniciarSesion);
-
-        btnIniciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InicioSesion();
-            }
-        });
-
-
-
-        CheckBox checkBox = findViewById(R.id.boxContrasena);
-        EditText editTextPassword = findViewById(R.id.txtCotrasena);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // Si el checkbox está marcado, mostrar la contraseña
-                    editTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                } else {
-                    // Si el checkbox no está marcado, ocultar la contraseña
-                    editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-            }
-        });
-
-        //TODO
         //comprobar si tenemos un usuario logado (token existente)
         //si hay token recuperamos los datos y llamamos al menú principal llenando la clase ActiveData con los datos del usuario y no sincronizamos
         //si no hay token permanecemos en esta vista para hacer login, sí sincronizamos
 
+        if(this.DatosUsuario()){
+            // Crear un Intent para iniciar la actividad del menú principal
+            Intent intent = new Intent(MainActivity.this, menu_principal.class);
+            startActivity(intent);
+            finish();
+        }else{
+            userName = findViewById(R.id.txtEmail);
+            password = findViewById(R.id.txtCotrasena);
+            btnIniciar = findViewById(R.id.b_IniciarSesion);
+
+            btnIniciar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InicioSesion();
+                }
+            });
+
+
+
+            CheckBox checkBox = findViewById(R.id.boxContrasena);
+            EditText editTextPassword = findViewById(R.id.txtCotrasena);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        // Si el checkbox está marcado, mostrar la contraseña
+                        editTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    } else {
+                        // Si el checkbox no está marcado, ocultar la contraseña
+                        editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    }
+                }
+            });
+        }
+    }
+
+    @SuppressLint("Range")
+    private boolean DatosUsuario(){
+        boolean ret = false;
+        try{
+            DBManager mDbHelper = new DBManager(getApplicationContext());
+            mDbHelper.createDatabase();
+            mDbHelper.open();
+
+            Cursor c = mDbHelper.getData("Select * from AspnetUsers where SecurityStamp<>''", null);
+            if(c != null && c.getCount()>0){
+                c.moveToFirst();
+                ActiveData.sincronizar = false;
+                AuthenticateResponse data = new AuthenticateResponse();
+                data.userData = new MikaWebUser();
+                data.token = c.getString(c.getColumnIndex(DBStructure.USUARIOS_SECURITYSTAMP));
+                data.userData.id = c.getString(c.getColumnIndex(DBStructure.USUARIOS_ID));
+                data.userData.userName = c.getString(c.getColumnIndex(DBStructure.USUARIOS_USERNAME));
+                data.userData.email = c.getString(c.getColumnIndex(DBStructure.USUARIOS_EMAIL));
+                data.userData.phoneNumber = c.getString(c.getColumnIndex(DBStructure.USUARIOS_PHONENUMBER));
+                data.userData.activo = Boolean.parseBoolean(c.getString(c.getColumnIndex(DBStructure.USUARIOS_ACTIVO)));
+                data.userData.apellidos = c.getString(c.getColumnIndex(DBStructure.USUARIOS_APELLIDOS));
+                data.userData.nombre = c.getString(c.getColumnIndex(DBStructure.USUARIOS_NOMBRE));
+                data.userData.isAdmin = Boolean.parseBoolean(c.getString(c.getColumnIndex(DBStructure.USUARIOS_ISADMIN)));
+                data.userData.codigo = c.getString(c.getColumnIndex(DBStructure.USUARIOS_CODIGO));
+                data.userData.salon = c.getInt(c.getColumnIndex(DBStructure.USUARIOS_SALON));
+                ActiveData.setLoginData(data, getApplicationContext());
+                ret = true;
+            }
+            mDbHelper.close();
+
+        }catch (Exception ex){
+            // Mostrar un Toast indicando que se ha producido un error
+            Toast.makeText(MainActivity.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            ret = false;
+        }
+        return ret;
     }
 
     private void InicioSesion() {
@@ -94,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                         ActiveData.setLoginData(resp, getApplicationContext());
                         // Crear un Intent para iniciar la actividad del menú principal
                         Intent intent = new Intent(MainActivity.this, menu_principal.class);
-                        //intent.putExtra("loginData", resp);
                         startActivity(intent);
                         finish();
                     } else {
@@ -118,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
             // Mostrar un Toast indicando que se ha producido un error
             Toast.makeText(MainActivity.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
 
     }
 

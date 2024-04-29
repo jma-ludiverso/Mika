@@ -23,4 +23,15 @@ public class DBStructure {
     public static final String USUARIOS_ISADMIN = "IsAdmin";
     public static final String USUARIOS_CODIGO = "Codigo";
     public static final String USUARIOS_SALON = "Salon";
+
+
+    public static final String EMPRESAS_IDEMPRESA = "IdEmpresa";
+    public static final String EMPRESAS_NOMBRE = "Nombre";
+    public static final String EMPRESAS_CIF = "CIF";
+    public static final String EMPRESAS_DIRECCION = "Direccion";
+    public static final String EMPRESAS_CP = "CP";
+    public static final String EMPRESAS_CIUDAD = "Ciudad";
+    public static final String EMPRESAS_TELEFONO = "Telefono";
+    public static final String EMPRESAS_EMAIL = "Email";
+
 }

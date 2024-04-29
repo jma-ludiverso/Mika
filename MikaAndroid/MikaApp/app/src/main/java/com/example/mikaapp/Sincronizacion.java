@@ -3,6 +3,7 @@ package com.example.mikaapp;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,15 +24,14 @@ public class Sincronizacion {
     private Context ctxt;
     private String token;
     private String url;
+   private String username;
 
-    //TODO
-    //poner en el constructor tambiém el username
-    //y modificar los parámetros de insertData para incluir token y username
-
-    public Sincronizacion(String _url, String _token, Context _ctxt){
+    public Sincronizacion(String _url, String _token, Context _ctxt , String _username){
         url = _url;
         token = _token;
         ctxt = _ctxt;
+        username = _username;
+
     }
 
     public void getData(DataRequest request) throws Exception {
@@ -45,7 +45,7 @@ public class Sincronizacion {
                     DBManager mDbHelper = new DBManager(ctxt);
                     mDbHelper.open();
 
-                    //Cursor testdata = mDbHelper.getTestData();
+                    //TODO: nos falta usar el username y el token
                     mDbHelper.InsertData(data);
 
                     mDbHelper.close();
@@ -58,8 +58,13 @@ public class Sincronizacion {
                         throw error;
                     } catch (VolleyError e) {
                         //throw new RuntimeException(e);
-                        //TODO
+
                         //Manejar error de autenticación
+                        Toast.makeText(ctxt, "Error de autenticación. Por favor, inicia sesión nuevamente.", Toast.LENGTH_LONG).show();
+                        // Redirigir al usuario a la pantalla de inicio de sesión
+                        Intent intent = new Intent(ctxt, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctxt.startActivity(intent);
                     }
                 }
             })
