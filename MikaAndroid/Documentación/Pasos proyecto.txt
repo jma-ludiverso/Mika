@@ -1,0 +1,5 @@
+- Usar Git como repositorio de código fuente
+- SQL Server management studio
+- SQLite
+- Documento funcional describiendo lo que se necesita
+- Documento con diseños de pantallas y menús
