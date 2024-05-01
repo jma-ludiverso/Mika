@@ -8,7 +8,7 @@
         public string Apellidos { get; set; }
         public string Email { get; set; }
         public bool Activo { get; set; }
-        public bool Administrador { get; set; }
+        public bool IsAdmin { get; set; }
         public string PhoneNumber { get; set; }
         public int Salon { get; set; }
         public string UserName { get; set; }

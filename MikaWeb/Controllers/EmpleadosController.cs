@@ -311,7 +311,7 @@ namespace MikaWeb.Controllers
                 bool flag;
                 if (bool.TryParse(searchBy, out flag))
                 {
-                    result = result.Where(r => (r.Activo == flag || r.Administrador == flag) && r.Salon==user.Salon);
+                    result = result.Where(r => (r.Activo == flag || r.IsAdmin == flag) && r.Salon==user.Salon);
                 }
                 else
                 {

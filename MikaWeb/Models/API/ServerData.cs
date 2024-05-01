@@ -8,5 +8,6 @@ namespace MikaWeb.Models.API
         public Salon DatosSalon { get; set; }
         public List<Cliente> ListaClientes { get; set; }
         public List<Servicio> ListaServicios { get; set; }
+
     }
 }

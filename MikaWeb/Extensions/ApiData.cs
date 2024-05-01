@@ -93,7 +93,7 @@ namespace MikaWeb.Extensions
                     data.Empleados.Add(new Models.Empleado()
                     {
                         Activo = bool.Parse(row["Activo"].ToString()),
-                        Administrador = bool.Parse(row["IsAdmin"].ToString()),
+                        IsAdmin = bool.Parse(row["IsAdmin"].ToString()),
                         Apellidos = row["Apellidos"].ToString(), 
                         Codigo = row["Codigo"].ToString(),
                         Email = row["Email"].ToString(),
