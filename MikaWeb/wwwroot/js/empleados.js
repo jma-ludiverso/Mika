@@ -31,7 +31,7 @@
             { data: "apellidos" },
             { data: "email" },
             { data: "activo" },
-            { data: "administrador" }
+            { data: "isAdmin" }
         ],
         // Column Definitions
         columnDefs: [
