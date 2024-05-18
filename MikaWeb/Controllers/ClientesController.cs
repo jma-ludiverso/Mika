@@ -15,6 +15,7 @@ using MikaWeb.Extensions.DB;
 using MikaWeb.Models;
 using MikaWeb.Models.AuxiliaryModels;
 using MikaWeb.Models.ViewModels;
+using NPOI.SS.Formula.Functions;
 
 namespace MikaWeb.Controllers
 {
@@ -37,24 +38,13 @@ namespace MikaWeb.Controllers
         public async Task<IActionResult> Edit(int Id, ViewModelCliente data)
         {
             DBExtension db = new DBExtension(_dbConfig.MikaWebContextConnection);
-            System.Data.SqlClient.SqlTransaction t = null;
             try
             {
                 if (data.Cliente == null)
                 {
-                    data.Cliente = new Cliente();
-                    string sql = "select IdSalon, Nombre, Telefono, Email From Clientes where IdCliente=@id";
-                    System.Data.SqlClient.SqlCommand sc = new System.Data.SqlClient.SqlCommand(sql);
-                    sc.Parameters.AddWithValue("id", Id);
-                    DataSet ds = await db.GetDataSet(sc, "datos");
-                    DataRow fila = ds.Tables["datos"].Rows[0];
-                    data.Cliente.IdCliente = Id;
-                    data.Cliente.IdSalon = int.Parse(fila["IdSalon"].ToString());
-                    data.Cliente.Nombre = fila["Nombre"].ToString();
-                    data.Cliente.Telefono = fila["Telefono"].ToString();
-                    data.Cliente.Email = fila["Email"].ToString();
                     ClientesExtension cliext = new ClientesExtension(db);
-                    data.Historial = await cliext.getHistorial(Id);
+                    data.Cliente = await cliext.GetClientData(Id);
+                    data.Historial = data.Cliente.Historial;
                     return View(data);
                 }
                 else
@@ -67,46 +57,15 @@ namespace MikaWeb.Controllers
                     {
                         data.Cliente.Email = "";
                     }
-                    t = db.GetTransaction();
-                    ClientesExtension cliext = new ClientesExtension(db, t);
-                    data.Historial = await cliext.getHistorial(Id);
-                    string sql = "Select count(1) from Clientes where IdSalon=@salon and IdCliente<>@id and nombre=@nombre";
-                    System.Data.SqlClient.SqlCommand sc = new System.Data.SqlClient.SqlCommand(sql);
-                    sc.Transaction = t;
-                    sc.Parameters.AddWithValue("@salon", data.Cliente.IdSalon);
-                    sc.Parameters.AddWithValue("id", Id);
-                    sc.Parameters.AddWithValue("@nombre", data.Cliente.Nombre);
-                    DataSet dsCheck = await db.GetDataSet(sc, "check");
-                    if (int.Parse(dsCheck.Tables["check"].Rows[0][0].ToString()) != 0)
-                    {
-                        throw new Exception("Ya existe un cliente con el mismo nombre");
-                    }
-                    sql = "update Clientes Set Nombre=@nombre,Telefono=@telefono,Email=@email " +
-                        "where IdCliente=@id";
-                    sc = new System.Data.SqlClient.SqlCommand(sql);
-                    sc.Transaction = t;
-                    sc.Parameters.AddWithValue("@nombre", data.Cliente.Nombre);
-                    sc.Parameters.AddWithValue("@telefono", data.Cliente.Telefono);
-                    sc.Parameters.AddWithValue("@email", data.Cliente.Email);
-                    sc.Parameters.AddWithValue("@id", Id);
-                    db.Command(sc);
-                    db.CommitTransaction(t);
-                    db.Close();
+                    ClientesExtension cliext = new ClientesExtension(db);
+                    bool result = await cliext.SaveClient(data.Cliente);
+                    data.Historial = await cliext.GetRecordData(Id);
                     ViewBag.StatusMessage = "Datos guardados";
                     return View(data);
                 }
             }
             catch (Exception ex)
             {
-                try
-                {
-                    if (t != null)
-                    {
-                        t.Rollback();
-                    }
-                    db.Close();
-                }
-                catch { };
                 ViewBag.StatusMessage = "Error: " + ex.Message;
                 return View(data);
             }
@@ -127,16 +86,16 @@ namespace MikaWeb.Controllers
                 if (string.IsNullOrEmpty(deleteId))
                 {
                     //guardar nueva línea de la historia
-                    Cliente_Historia ch = await cliext.GuardaHistoria(data.Cliente.IdCliente, data.NuevaHistoria);
+                    Cliente_Historia ch = await cliext.SaveRecordData(data.Cliente.IdCliente, data.NuevaHistoria);
                     data.NuevaHistoria = "";
                     ModelState.Clear();
                 }
                 else
                 {
                     //borrar línea de la historia
-                    cliext.BorraHistoria(data.Cliente.IdCliente, data.IdBorrar);
+                    cliext.DeleteRecordData(data.Cliente.IdCliente, data.IdBorrar);
                 }
-                data.Historial = await cliext.getHistorial(data.Cliente.IdCliente);
+                data.Historial = await cliext.GetRecordData(data.Cliente.IdCliente);
                 db.Close();
                 return View("Edit", data);
             }
@@ -210,8 +169,6 @@ namespace MikaWeb.Controllers
             }
             else
             {
-                DBExtension db = new DBExtension(_dbConfig.MikaWebContextConnection);
-                System.Data.SqlClient.SqlTransaction t = null;
                 try
                 {
                     if (string.IsNullOrEmpty(data.Cliente.Telefono))
@@ -222,51 +179,13 @@ namespace MikaWeb.Controllers
                     {
                         data.Cliente.Email = "";
                     }
-                    t = db.GetTransaction();
-                    string sql = "Select count(1) from Clientes where IdSalon=@salon and nombre=@nombre";
-                    System.Data.SqlClient.SqlCommand sc = new System.Data.SqlClient.SqlCommand(sql);
-                    sc.Transaction = t;
-                    sc.Parameters.AddWithValue("@salon", data.Cliente.IdSalon);
-                    sc.Parameters.AddWithValue("@nombre", data.Cliente.Nombre);
-                    DataSet dsCheck = await db.GetDataSet(sc, "check");
-                    if (int.Parse(dsCheck.Tables["check"].Rows[0][0].ToString()) != 0)
-                    {
-                        throw new Exception("Ya existe un cliente con el mismo nombre");
-                    }
-                    sql = "select Max(IdCliente) + 1 From Clientes ";
-                    sc = new System.Data.SqlClient.SqlCommand(sql);
-                    sc.Transaction = t;
-                    DataSet ds = await db.GetDataSet(sc, "max");
-                    sql = "insert into Clientes Values(@IdCliente,@Idsalon,@nombre,@telefono,@email)";
-                    sc = new System.Data.SqlClient.SqlCommand(sql);
-                    sc.Transaction = t;
-                    data.Cliente.IdCliente = int.Parse(ds.Tables["max"].Rows[0][0].ToString());
-                    sc.Parameters.AddWithValue("@IdCliente", data.Cliente.IdCliente);
-                    sc.Parameters.AddWithValue("@Idsalon", data.Cliente.IdSalon);
-                    sc.Parameters.AddWithValue("@nombre", data.Cliente.Nombre);
-                    sc.Parameters.AddWithValue("@telefono", data.Cliente.Telefono);
-                    sc.Parameters.AddWithValue("@email", data.Cliente.Email);
-                    db.Command(sc);
-                    if (!string.IsNullOrEmpty(data.NuevaHistoria))
-                    {
-                        ClientesExtension cliext = new ClientesExtension(db, t);
-                        await cliext.GuardaHistoria(data.Cliente.IdCliente, data.NuevaHistoria);
-                    }
-                    db.CommitTransaction(t);
-                    db.Close();
+                    data.Cliente.IdCliente = -1;
+                    ClientesExtension cliext = new ClientesExtension(new DBExtension(_dbConfig.MikaWebContextConnection));
+                    bool resul = await cliext.SaveClient(data.Cliente);
                     return RedirectToAction("Index", "Clientes");
                 }
                 catch (Exception ex)
                 {
-                    try
-                    {
-                        if (t != null)
-                        {
-                            t.Rollback();
-                        }
-                        db.Close();
-                    }
-                    catch { };
                     ViewBag.StatusMessage = "Error: " + ex.Message;
                     return View(data);
                 }

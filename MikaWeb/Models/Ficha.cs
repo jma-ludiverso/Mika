@@ -34,7 +34,6 @@ namespace MikaWeb.Models
         [DisplayName("Cambio €: ")]
         public double Cambio { get; set; }
         public bool Cerrada { get; set; }
-        //public string IncExc { get; set; }
         public string Anulable { get; set; }
         public List<Ficha_Linea> Lineas { get; set; }
     }

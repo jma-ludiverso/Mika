@@ -283,7 +283,7 @@ namespace MikaWeb.Controllers
                 if (data.Datos.IdCliente != 0 && !data.Datos.NFicha.Equals("(sin guardar)"))
                 {
                     ClientesExtension cliext = new ClientesExtension(db);
-                    hist.Historial = await cliext.getHistorial(data.Datos.IdCliente);
+                    hist.Historial = await cliext.GetRecordData(data.Datos.IdCliente);
                     hist.MuestraCabecera = true;
                     hist.Cliente = lstCli[0];
                     hist.FichaRef = data.Datos.NFicha;
@@ -748,13 +748,13 @@ namespace MikaWeb.Controllers
                 if (string.IsNullOrEmpty(deleteId))
                 {
                     //guardar nueva línea de la historia
-                    Cliente_Historia ch = await cliext.GuardaHistoria(data.Cliente.IdCliente, data.NuevaHistoria);
+                    Cliente_Historia ch = await cliext.SaveRecordData(data.Cliente.IdCliente, data.NuevaHistoria);
                     data.NuevaHistoria = "";
                 }
                 else
                 {
                     //borrar línea de la historia
-                    cliext.BorraHistoria(data.Cliente.IdCliente, data.IdBorrar);
+                    cliext.DeleteRecordData(data.Cliente.IdCliente, data.IdBorrar);
                 }
                 db.Close();
                 return RedirectToAction("Ficha", new { numficha = data.FichaRef });

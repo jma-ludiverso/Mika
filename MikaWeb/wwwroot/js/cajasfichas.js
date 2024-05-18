@@ -230,13 +230,6 @@ jQuery.fn.dataTable.render.linkFicha = function () {
         if (row.anulable != "N/A") {
             s += '<span class="badge badge-danger"><a href="#" class="anular" data-id="' + d.toString() + '" data-toggle="modal" data-target="#borrafichaModal">Anular</a></span>&nbsp;';
         }            
-        //if (row.incExc != "N/A" && row.formaPago == "Efectivo") {
-        //    if (row.incExc == "True") {
-        //        s += '<div class="incexc" style="display:inline;"><span class="badge badge-danger"><a href="#" class="excluir" data-id="' + d.toString() + '">Excluir</a></span></div>';
-        //    } else {
-        //        s += '<div class="incexc" style="display:inline;"><span class="badge badge-success"><a href="#" class="incluir" data-id="' + d.toString() + '">Incluir</a></span></div>';
-        //    }
-        //}
         return s;            
     };
 };
