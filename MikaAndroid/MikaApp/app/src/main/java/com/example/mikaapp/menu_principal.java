@@ -1,10 +1,8 @@
 package com.example.mikaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -56,7 +54,7 @@ public class menu_principal extends AppCompatActivity {
     }
 
     public void ir_agregar_usuario(View v){
-        Intent i = new Intent(this, agregar_usuario.class);
+        Intent i = new Intent(this, seleccion_cliente.class);
         startActivity(i);
     }
     public void ir_fichas_activas(View v){

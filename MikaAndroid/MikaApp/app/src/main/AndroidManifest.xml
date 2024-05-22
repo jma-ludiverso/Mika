@@ -15,7 +15,16 @@
         android:theme="@style/Theme.MikaApp"
         tools:targetApi="31">
         <activity
-            android:name=".agregar_usuario"
+            android:name=".layout_nueva_linea"
+            android:exported="false" />
+        <activity
+            android:name=".dialog_new_line"
+            android:exported="false" />
+        <activity
+            android:name=".ventana_nueva_linea"
+            android:exported="false" />
+        <activity
+            android:name=".seleccion_cliente"
             android:exported="false"
             android:parentActivityName=".menu_principal" />
         <activity
@@ -29,7 +38,7 @@
         <activity
             android:name=".fichas_activas"
             android:exported="false"
-            android:parentActivityName=".agregar_usuario" />
+            android:parentActivityName=".seleccion_cliente" />
         <activity
             android:name=".menu_principal"
             android:exported="false" />

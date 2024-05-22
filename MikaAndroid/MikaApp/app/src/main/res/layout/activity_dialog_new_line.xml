@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+            <TableRow
+                android:id="@+id/tableRow"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/grey">
+
+                <TextView
+                    android:id="@+id/txt_DialogCabecera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="11dp"
+                    android:textStyle="bold"
+                    android:text="Ficha cliente - Línea ventana"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+
+            </TableRow>
+
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/grey">
+
+                <TextView
+                    android:id="@+id/txt_Empleado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Empleado"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <Spinner
+                    android:id="@+id/spnEmpleado"
+                    android:layout_width="75dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="120dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/white"
+                    android:text="cod."
+                    android:textSize="20dp"
+                    style="@style/SpinnerStyle"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <EditText
+                    android:id="@+id/edtxt_codEmpleado"
+                    android:layout_width="840dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/grey">
+
+                <TextView
+                    android:id="@+id/txtServicio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Servicio"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/txtTipo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Tipo"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/txtDescripcion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="65dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Descripción"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/txtBase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="190dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Base €"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/txtDescuento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="130dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Desc. %"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/txtIva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Iva %"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/txtTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="65dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Total"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/grey">
+
+                <Spinner
+                    android:id="@+id/spnServicio"
+                    android:layout_width="75dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="52dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/white"
+                    android:text="cod."
+                    android:textSize="20dp"
+                    android:entries="@array/servicio_options"
+                    style="@style/SpinnerStyle"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <ImageView
+                    android:id="@+id/imgTipo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="10dp"
+                     />
+
+
+                <EditText
+                    android:id="@+id/edtxtDescrpcion"
+                    android:layout_width="292dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/edtxtBaseE"
+                    android:layout_width="180dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="0"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/edtxtDesc"
+                    android:layout_width="112dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="0"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/edtxtIva"
+                    android:layout_width="97dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="0"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/edtxtTotal"
+                    android:layout_width="141dp"
+                    android:layout_height="37dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_edittext_bg"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="0"
+                    android:inputType="number" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey">
+
+                <Button
+                    android:id="@+id/b_cancelar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="960dp"
+                    android:backgroundTint="@color/gris_oscuro_material"
+                    android:text="Cancelar"
+                    android:textSize="20dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/b_guardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:backgroundTint="@color/verde_material"
+                    android:text="Guardar"
+                    android:textSize="20dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+            </TableRow>
+
+</LinearLayout>

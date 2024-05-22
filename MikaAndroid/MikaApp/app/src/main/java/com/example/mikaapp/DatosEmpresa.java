@@ -9,4 +9,6 @@ public class DatosEmpresa {
     public int idEmpresa	;
     public String nombre	;
     public String telefono;
+
+    
 }

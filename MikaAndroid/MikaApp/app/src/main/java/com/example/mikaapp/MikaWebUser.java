@@ -22,4 +22,5 @@ public class MikaWebUser {
     public boolean isAdmin	;
     public String codigo	;
     public int salon;
+    //public String securityExpiration;
 }

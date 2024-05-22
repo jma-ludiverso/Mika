@@ -30,8 +30,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.ResponseCache;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     EditText userName,password;
@@ -47,10 +52,19 @@ public class MainActivity extends AppCompatActivity {
         //si no hay token permanecemos en esta vista para hacer login, sí sincronizamos
 
         if(this.DatosUsuario()){
-            // Crear un Intent para iniciar la actividad del menú principal
-            Intent intent = new Intent(MainActivity.this, menu_principal.class);
-            startActivity(intent);
-            finish();
+            //Antes de iniciar la actividad se verifica si el token está próximo a expirar (menos de 2 días)
+            Date actual = new Date();
+            long time_difference = ActiveData.loginData.tokenExpires.getTime() - actual.getTime();
+            long dias_diference = (time_difference/(1000*60*60*24)) % 365;
+            if (dias_diference <= 2){
+                this.TokenRenovacion();
+            }
+            else{
+                // Crear un Intent para iniciar la actividad del menú principal
+                Intent intent = new Intent(MainActivity.this, menu_principal.class);
+                startActivity(intent);
+                finish();
+            }
         }else{
             userName = findViewById(R.id.txtEmail);
             password = findViewById(R.id.txtCotrasena);
@@ -91,26 +105,35 @@ public class MainActivity extends AppCompatActivity {
             mDbHelper.open();
 
             Cursor c = mDbHelper.getData("Select * from AspnetUsers where SecurityStamp<>''", null);
-            if(c != null && c.getCount()>0){
+            if(c != null && c.getCount()>0){  //si entra en este if, tenemos datos de usuario logado
                 c.moveToFirst();
                 ActiveData.sincronizar = false;
                 AuthenticateResponse data = new AuthenticateResponse();
                 data.userData = new MikaWebUser();
                 data.token = c.getString(c.getColumnIndex(DBStructure.USUARIOS_SECURITYSTAMP));
-                data.userData.id = c.getString(c.getColumnIndex(DBStructure.USUARIOS_ID));
-                data.userData.userName = c.getString(c.getColumnIndex(DBStructure.USUARIOS_USERNAME));
-                data.userData.email = c.getString(c.getColumnIndex(DBStructure.USUARIOS_EMAIL));
-                data.userData.phoneNumber = c.getString(c.getColumnIndex(DBStructure.USUARIOS_PHONENUMBER));
-                data.userData.activo = Boolean.parseBoolean(c.getString(c.getColumnIndex(DBStructure.USUARIOS_ACTIVO)));
-                data.userData.apellidos = c.getString(c.getColumnIndex(DBStructure.USUARIOS_APELLIDOS));
-                data.userData.nombre = c.getString(c.getColumnIndex(DBStructure.USUARIOS_NOMBRE));
-                data.userData.isAdmin = Boolean.parseBoolean(c.getString(c.getColumnIndex(DBStructure.USUARIOS_ISADMIN)));
-                data.userData.codigo = c.getString(c.getColumnIndex(DBStructure.USUARIOS_CODIGO));
-                data.userData.salon = c.getInt(c.getColumnIndex(DBStructure.USUARIOS_SALON));
-                ActiveData.setLoginData(data, getApplicationContext());
-                ret = true;
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy", Locale.ENGLISH);
+                formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
+                data.tokenExpires = formatter.parse(c.getString(c.getColumnIndex(DBStructure.USUARIOS_SECURITYEXPIRATION)));
+                Date actual = new Date();
+
+                //Se pregunta si el token ha expirado
+                if(actual.before(data.tokenExpires)){
+                    data.userData.id = c.getString(c.getColumnIndex(DBStructure.USUARIOS_ID));
+                    data.userData.userName = c.getString(c.getColumnIndex(DBStructure.USUARIOS_USERNAME));
+                    data.userData.email = c.getString(c.getColumnIndex(DBStructure.USUARIOS_EMAIL));
+                    data.userData.phoneNumber = c.getString(c.getColumnIndex(DBStructure.USUARIOS_PHONENUMBER));
+                    data.userData.activo = Boolean.parseBoolean(c.getString(c.getColumnIndex(DBStructure.USUARIOS_ACTIVO)));
+                    data.userData.apellidos = c.getString(c.getColumnIndex(DBStructure.USUARIOS_APELLIDOS));
+                    data.userData.nombre = c.getString(c.getColumnIndex(DBStructure.USUARIOS_NOMBRE));
+                    data.userData.isAdmin = Boolean.parseBoolean(c.getString(c.getColumnIndex(DBStructure.USUARIOS_ISADMIN)));
+                    data.userData.codigo = c.getString(c.getColumnIndex(DBStructure.USUARIOS_CODIGO));
+                    data.userData.salon = c.getInt(c.getColumnIndex(DBStructure.USUARIOS_SALON));
+                    ActiveData.setLoginData(data, getApplicationContext());
+                    ret = true;
+                }
+
             }
-            mDbHelper.close();
+                mDbHelper.close();
 
         }catch (Exception ex){
             // Mostrar un Toast indicando que se ha producido un error
@@ -122,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void InicioSesion() {
         try{
+            //TODO: Controlar que si no se han puesto usuario y contraseña que no haga nada
+
             String url = getString(R.string.api_url);
             url += "authenticate";
 
@@ -133,21 +158,9 @@ public class MainActivity extends AppCompatActivity {
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                 public void onResponse(JSONObject response) {
-                    AuthenticateResponse resp = new Gson().fromJson(response.toString(), AuthenticateResponse.class);
-                    if (resp.succeeded) {
-                        ActiveData.sincronizar = true;
-                        ActiveData.setLoginData(resp, getApplicationContext());
-                        // Crear un Intent para iniciar la actividad del menú principal
-                        Intent intent = new Intent(MainActivity.this, menu_principal.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        // Manejar el caso en que el inicio de sesión no sea exitoso
-                        // Mostrar un Toast indicando que el inicio de sesión no fue exitoso
-                        Toast.makeText(MainActivity.this, "Inicio de sesión fallido", Toast.LENGTH_SHORT).show();
-                    }
-
+                    MainActivity.this.AutenticacionCorrecta(response);
                 }
+
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
@@ -164,5 +177,66 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public void AutenticacionCorrecta(JSONObject response){
+        AuthenticateResponse resp = new Gson().fromJson(response.toString(), AuthenticateResponse.class);
+        if (resp.succeeded) {
+            ActiveData.sincronizar = true;
+            ActiveData.setLoginData(resp, getApplicationContext());
+            // Crear un Intent para iniciar la actividad del menú principal
+            Intent intent = new Intent(MainActivity.this, menu_principal.class);
+            startActivity(intent);
+            finish();
+        } else {
+            // Manejar el caso en que el inicio de sesión no sea exitoso
+            // Mostrar un Toast indicando que el inicio de sesión no fue exitoso
+            Toast.makeText(MainActivity.this, "Inicio de sesión fallido", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void TokenRenovacion() {
+
+        try {
+            String url = getString(R.string.api_url);
+            url += "authenticaterenewal";
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    MainActivity.this.AutenticacionCorrecta(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    try {
+                        throw error;
+                    } catch (VolleyError e) {
+                        //throw new RuntimeException(e);
+
+                        //Manejar error de autenticación
+                        Toast.makeText(getApplicationContext(), "Error de renovación. Por favor, inicia sesión nuevamente.", Toast.LENGTH_LONG).show();
+                        // Redirigir al usuario a la pantalla de inicio de sesión
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(intent);
+                    }
+                }
+            })
+            {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + ActiveData.loginData.token);
+                    return headers;
+                }};
+
+            Volley.newRequestQueue(getApplicationContext()).add(jsonObjectRequest);
+        } catch (Exception ex){
+            // Mostrar un Toast indicando que se ha producido un error
+            Toast.makeText(MainActivity.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
 }

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blackLight"
+    tools:context=".fichas_activas">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="126dp"
+        android:background="@color/whiteDarck"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+
+        <TextView
+            android:id="@+id/txtMika"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:fontFamily="serif"
+            android:text="MICA"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txtPeluqueros"
+            app:layout_constraintHorizontal_bias="0.833"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtPeluqueros"
+            android:layout_width="135dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="972dp"
+            android:text="peluqueros"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.643" />
+
+        <TextView
+            android:id="@+id/txtCorreo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:text="ejemplo@gamil.com"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.636" />
+
+        <TextView
+            android:id="@+id/txtHola"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="2dp"
+            android:text="Hola"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txtCorreo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.692" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TableLayout
+        android:layout_width="1280dp"
+        android:layout_height="771dp"
+        android:layout_marginTop="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TableRow>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="568dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="84dp"
+                    android:layout_marginTop="130dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre:"
+                        android:textColor="@color/whiteDarck"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/editTextNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="49dp"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:hint=""
+                        android:inputType="text"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Teléfono:"
+                        android:textColor="@color/whiteDarck"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/editTextTelefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="49dp"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:hint=""
+                        android:inputType="text"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Email:"
+                        android:textColor="@color/whiteDarck"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/editTextSEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="49dp"
+                        android:background="@color/white"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:textSize="20dp" />
+
+                    <Button
+                        android:id="@+id/b_AgregarCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="70dp"
+                        android:backgroundTint="@color/grey"
+                        android:layout_marginTop="30dp"
+                        android:textSize="23dp"
+                        android:textAllCaps="false"
+                        android:text="Agregar Cliente" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="457dp"
+                    android:layout_height="407dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginLeft="70dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="88dp"
+                        android:background="@color/black">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="79dp"
+                            android:layout_height="59dp"
+                            android:layout_marginTop="15dp"
+                            app:srcCompat="@drawable/usuario" />
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="79dp"
+                            android:layout_height="34dp"
+                            android:layout_marginTop="30dp"
+                            android:text="Cliente"
+                            android:textColor="@color/white"
+                            android:textSize="24dp" />
+
+                        <EditText
+                            android:id="@+id/lupaCliente"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/white"
+                            android:ems="10"
+                            android:hint="buscar"
+                            android:inputType="text"
+                            android:textSize="24dp" />
+                    </TableRow>
+
+                    <ListView
+                        android:id="@+id/lista_de_clientes"
+                        android:layout_width="match_parent"
+                        android:layout_height="313dp"
+                        android:background="@color/white" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </TableRow>
+
+    </TableLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

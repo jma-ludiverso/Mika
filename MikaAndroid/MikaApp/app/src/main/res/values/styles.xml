@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:background">@color/grey</item> <!-- Cambia el color de fondo aquí -->
+        <item name="android:maxWidth">2000dp</item> <!-- Ajusta el ancho máximo del diálogo -->
+        <item name="android:maxHeight">1000dp</item> <!-- Ajusta la altura máxima del diálogo -->
+    </style>
+
+    <style name="SpinnerStyle">
+        <item name="android:textSize">25sp</item> <!-- Cambia el tamaño del texto según lo necesites -->
+    </style>
+</resources>

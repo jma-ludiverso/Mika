@@ -4,5 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blackLight">#272B30</color>
     <color name="grey">#858C92</color>
+    <color name="lightgrey">#D3D3D3</color>
     <color name="whiteDarck">#e9ecef</color>
+    <color name="verde_material">#4CAF50</color>
+    <color name="gris_oscuro_material">#424242</color>
 </resources>

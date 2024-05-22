@@ -5,6 +5,7 @@ import android.content.Context;
 public class ActiveData {
 
     static AuthenticateResponse loginData;
+    static DatosFicha Ficha;
     static boolean sincronizar;
 
     public static void setLoginData(AuthenticateResponse data, Context ctxt){
