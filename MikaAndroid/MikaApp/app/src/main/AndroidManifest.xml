@@ -21,9 +21,6 @@
             android:name=".dialog_new_line"
             android:exported="false" />
         <activity
-            android:name=".ventana_nueva_linea"
-            android:exported="false" />
-        <activity
             android:name=".seleccion_cliente"
             android:exported="false"
             android:parentActivityName=".menu_principal" />
@@ -34,7 +31,7 @@
         <activity
             android:name=".nueva_ficha"
             android:exported="false"
-            android:parentActivityName=".menu_principal" />
+            android:parentActivityName=".seleccion_cliente" />
         <activity
             android:name=".fichas_activas"
             android:exported="false"

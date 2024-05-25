@@ -136,6 +136,7 @@ public class DBStructure {
     public static final String FICHAS_CERRADA = "Cerrada";
 
     public static final String FICHASLINEAS_NFICHA = "NFicha";
+    //public static final String FICHASLINEAS_NOMBREEMPLEADO = "NombreEmpleado";
     public static final String FICHASLINEAS_IDSALON = "IdSalon";
     public static final String FICHASLINEAS_LINEA = "Linea";
     public static final String FICHASLINEAS_CODIGO = "Codigo";

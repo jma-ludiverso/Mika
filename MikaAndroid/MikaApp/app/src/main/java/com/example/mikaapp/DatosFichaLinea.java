@@ -2,6 +2,9 @@ package com.example.mikaapp;
 
 public class DatosFichaLinea {
     public String nFicha;
+    public String nEmpleado;
+    public String tipo;
+    public String codServicio;
     public int idSalon;
     public int linea;
     public String codigo;

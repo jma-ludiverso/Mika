@@ -3,46 +3,8 @@
 
     <string name="api_url">https://test.ludiverso.com/api/Resources/</string>
 
-    <string-array name="servicio_options">
-        <item>cod.</item>
-        <item>99</item>
-        <item>01</item>
-        <item>02</item>
-        <item>03</item>
-        <item>04</item>
-        <item>10</item>
-        <item>11</item>
-        <item>14</item>
-        <item>20</item>
-        <item>21</item>
-        <item>22</item>
-        <item>30</item>
-        <item>31</item>
-        <item>32</item>
-        <item>33</item>
-        <item>34</item>
-        <item>40</item>
-        <item>41</item>
-        <item>44</item>
-        <item>45</item>
-        <item>46</item>
-        <item>50</item>
-        <item>61</item>
-        <item>66</item>
-        <item>70</item>
-        <item>71</item>
-        <item>71</item>
-        <item>72</item>
-        <item>73</item>
-        <item>80</item>
-        <item>81</item>
-        <item>82</item>
-        <item>83</item>
-        <item>90</item>
-        <item>91</item>
-        <item>92</item>
-        <item>93</item>
-    </string-array>
+    <string name="underlined_text_mod"><u>Modificar</u></string>
+    <string name="underlined_text_elim"><u>Eliminar</u></string>
 
 </resources>
 

@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -36,8 +38,10 @@ public class dialog_new_line{
     EditText edtxtIva;
     EditText edtxtTotal;
     String empleadoSeleccionado;
+    String nombreEmpleado;
     DatosServicios servicioSelecionado;
     ImageView imgTipo;
+    float catDesc = 0;
 
     public dialog_new_line (Context contexto, Activity act) {
         final  Dialog dialog = new Dialog(contexto);
@@ -79,6 +83,7 @@ public class dialog_new_line{
                 MikaWebUser emp = (MikaWebUser) adaptador.getItem(position);
                 edtxt_codEmpleado.setText(emp.nombre + " " + emp.apellidos);
                 empleadoSeleccionado = emp.codigo;
+                nombreEmpleado = emp.nombre + " " + emp.apellidos;
             }
 
             @Override
@@ -144,15 +149,19 @@ public class dialog_new_line{
                     linea.ivaPorc = Float.parseFloat(edtxtIva.getText().toString());
                     linea.total = Float.parseFloat(edtxtTotal.getText().toString());
                     linea.descripcion = edtxtDescrpcion.getText().toString();
-                    linea.descuentoCant = 0;
+                    linea.descuentoCant = catDesc;
+                    linea.idSalon = ActiveData.Ficha.idSalon;
+                    linea.ivaCant = servicioSelecionado.ivaCant;
+                    linea.linea = 0;
+                    linea.nFicha = ActiveData.Ficha.nFicha;
+                    linea.nEmpleado = nombreEmpleado;
+                    linea.tipo = servicioSelecionado.tipo;
+                    linea.codServicio = servicioSelecionado.codigo;
+                    //las comisiones se calculan en el servicio web
                     linea.comisionP1 = 0;
                     linea.comisionP2 = 0;
                     linea.comisionP3 = 0;
                     linea.comisionP4 = 0;
-                    linea.idSalon = ActiveData.Ficha.idSalon;
-                    linea.ivaCant = 0;
-                    linea.linea = 0;
-                    linea.nFicha = ActiveData.Ficha.nFicha;
 
 
                     ficha.datosLinea(linea);
@@ -160,6 +169,23 @@ public class dialog_new_line{
                 } else {
                     Toast.makeText(dialogContext, "Debe seleccionar un empleado y un servicio ", Toast.LENGTH_SHORT).show();
                 }
+
+            }
+        });
+
+        edtxtBaseE.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                CalculateDesc();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -238,5 +264,66 @@ public class dialog_new_line{
         } catch (Exception ex){
             Toast.makeText(dialogContext, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void CalculateDesc()
+    {
+        //debe saltar si cambia el precio base o el porcentaje de descuento
+        if (edtxtDesc.getText().equals(""))
+        {
+            edtxtDesc.setText("0");
+        }
+        if (edtxtBaseE.getText().equals(""))
+        {
+            edtxtBaseE.setText("0");
+        }
+        float desc = Float.parseFloat(edtxtDesc.getText().toString());
+        float precio = Float.parseFloat(edtxtBaseE.getText().toString());
+        float cantidad = precio * (desc / 100);
+        catDesc = cantidad;
+        this.CalculateIva();
+        this.CalculatePVP();
+}
+
+    private void CalculateIva()
+    {
+        //debe saltar si cambia el porcentaje de iva
+        //(hay que ajustar los nombres de los editText y de la variable servicio seleccionado a los correctos)
+        if (edtxtBaseE.getText().equals(""))
+        {
+            edtxtBaseE.setText("0");
+        }
+        if (edtxtIva.getText().equals(""))
+        {
+            edtxtIva.setText("0");
+        }
+        float precio = Float.parseFloat(edtxtBaseE.getText().toString());
+        float iva = Float.parseFloat(edtxtIva.getText().toString());
+        float cantidad = (precio - catDesc) * (iva / 100);
+        servicioSelecionado.ivaCant = cantidad;
+        this.CalculatePVP();
+    }
+
+    private void CalculatePVP()
+    {
+        //debe saltar si cambia el precio total
+        //(hay que ajustar los nombres de los editText y de la variable servicio seleccionado a los correctos)
+        if (edtxtTotal.getText().equals(""))
+        {
+            edtxtTotal.setText("0");
+        }
+        if (edtxtIva.getText().equals(""))
+        {
+            edtxtIva.setText("0");
+        }
+        float precio = Float.parseFloat(edtxtTotal.getText().toString());
+        float iva = Float.parseFloat(edtxtIva.getText().toString());
+        float preciobase = precio / ((iva / 100) + 1);
+        edtxtBaseE.setText(String.valueOf(preciobase));
+        edtxtDesc.setText("0");
+        if (servicioSelecionado != null){
+            servicioSelecionado.ivaCant = precio - preciobase;
+        }
+        catDesc = 0;
     }
 }

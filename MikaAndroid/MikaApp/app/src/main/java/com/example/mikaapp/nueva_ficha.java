@@ -1,12 +1,16 @@
 package com.example.mikaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -14,12 +18,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -58,6 +65,7 @@ public class nueva_ficha extends AppCompatActivity {
         cambio = findViewById(R.id.edtxtCambio);
         formaPago = findViewById(R.id.radio_group);
         lineas = findViewById(R.id.tablaLineas);
+
 
 
         this.cargaDatosFicha();
@@ -118,26 +126,86 @@ public class nueva_ficha extends AppCompatActivity {
     }
 
     private void cargaDatosLineas(List<DatosFichaLinea> lineas) {
-
+        for (DatosFichaLinea linea : lineas) {
+            datosLinea(linea);
+        }
     }
 
-    public void datosLinea(DatosFichaLinea linea){
+    public void datosLinea(DatosFichaLinea linea) {
+        if (linea.linea == 0){
+            linea.linea = ActiveData.Ficha.lineas.size()+1;
+            ActiveData.Ficha.lineas.add(linea);
+        }
         TableRow fila = new TableRow(this);
         fila.setBackgroundColor(getResources().getColor(R.color.lightgrey));
-        fila.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        fila.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-        TextView txtNum = new TextView(this);
-        txtNum.setText("linea1");
-        fila.addView(txtNum);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        ConstraintLayout botones = (ConstraintLayout) inflater.inflate(R.layout.botones_fila,null);
+        fila.addView(botones, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+
         TextView emp = new TextView(this);
-        emp.setText(linea.codigo);
-        fila.addView(emp);
+        emp.setText(linea.codigo + " - " + linea.nEmpleado);
+        emp.setTextSize(20);
+        emp.setTextColor(getResources().getColor(R.color.black));
+        emp.setGravity(Gravity.CENTER);
+        fila.addView(emp, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
-        lineas.addView(fila, new TableLayout.LayoutParams());
+        ImageView tipo = new ImageView(this);
+        if(linea.tipo.equals("Producto")){
+            tipo.setImageResource(R.drawable.p);
+        } else {
+            tipo.setImageResource(R.drawable.tijeras);
+        }
+        tipo.setMaxWidth(50);
+        tipo.setMaxHeight(50);
+        tipo.setScaleType(ImageView.ScaleType.FIT_CENTER); // Ajustar la escala de la imagen para que quepa dentro del tamaño máximo
+        tipo.setAdjustViewBounds(true);
+        TableRow.LayoutParams imgParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+        imgParams.gravity = Gravity.CENTER;
+        fila.addView(tipo, imgParams);
+
+        TextView descripcion = new TextView(this);
+        descripcion.setText(linea.codServicio + " - " + linea.descripcion);
+        descripcion.setTextSize(20);
+        descripcion.setTextColor(getResources().getColor(R.color.black));
+        descripcion.setGravity(Gravity.CENTER);
+        fila.addView(descripcion, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView baseEuros = new TextView(this);
+        DecimalFormat formatter = new DecimalFormat("###.00");
+        baseEuros.setText(formatter.format(linea.base));
+        baseEuros.setTextSize(20);
+        baseEuros.setTextColor(getResources().getColor(R.color.black));
+        baseEuros.setGravity(Gravity.CENTER);
+        fila.addView(baseEuros, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView descuentoPorcg = new TextView(this);
+        descuentoPorcg.setText(formatter.format(linea.descuentoPorc));
+        descuentoPorcg.setTextSize(20);
+        descuentoPorcg.setTextColor(getResources().getColor(R.color.black));
+        descuentoPorcg.setGravity(Gravity.CENTER);
+        fila.addView(descuentoPorcg, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView ivaPorcg = new TextView(this);
+        ivaPorcg.setText(formatter.format(linea.ivaPorc));
+        ivaPorcg.setTextSize(20);
+        ivaPorcg.setTextColor(getResources().getColor(R.color.black));
+        ivaPorcg.setGravity(Gravity.CENTER);
+        fila.addView(ivaPorcg, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView totalPorcg = new TextView(this);
+        totalPorcg.setText(formatter.format(linea.total));
+        totalPorcg.setTextSize(20);
+        totalPorcg.setTextColor(getResources().getColor(R.color.black));
+        totalPorcg.setGravity(Gravity.CENTER);
+        fila.addView(totalPorcg, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+
+        lineas.addView(fila, new TableLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
     }
 
-        /*public void mostrarDialogoNuevaLinea(View view) {
-            Intent i = new Intent(this, layout_nueva_linea.class);
-            startActivity(i);
-        }*/
 }

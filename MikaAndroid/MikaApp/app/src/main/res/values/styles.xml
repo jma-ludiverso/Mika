@@ -9,4 +9,34 @@
     <style name="SpinnerStyle">
         <item name="android:textSize">25sp</item> <!-- Cambia el tamaño del texto según lo necesites -->
     </style>
+
+    <style name="btnFilaMod" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">@color/whiteDarck</item>
+        <item name="android:backgroundTint">#f89406</item>
+        <item name="android:shadowColor">@color/lightgrey</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+
+    </style>
+
+    <style name="btnFilaElim" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">@color/whiteDarck</item>
+        <item name="android:backgroundTint">#ee5f5b</item>
+        <item name="android:shadowColor">@color/lightgrey</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
 </resources>
