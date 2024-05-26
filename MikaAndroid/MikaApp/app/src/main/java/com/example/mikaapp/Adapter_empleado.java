@@ -38,6 +38,17 @@ public class Adapter_empleado extends BaseAdapter {
         return 0;
     }
 
+    public int getPosition(String codigo){
+        int position = 0;
+        for(int i=0; i<= lstEmpleados.size()-1;i++){
+            if(lstEmpleados.get(i).codigo.equals((codigo))){
+                position = i;
+                break;
+            }
+        }
+        return position;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.fila_spinner, null);

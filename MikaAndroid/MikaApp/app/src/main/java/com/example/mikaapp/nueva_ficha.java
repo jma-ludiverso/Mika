@@ -25,10 +25,13 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -142,6 +145,14 @@ public class nueva_ficha extends AppCompatActivity {
 
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         ConstraintLayout botones = (ConstraintLayout) inflater.inflate(R.layout.botones_fila,null);
+        Button btnModifcar = botones.findViewById(R.id.btnModificar);
+        btnModifcar.setTag(linea);
+        btnModifcar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modificar(v);
+            }
+        });
         fila.addView(botones, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView emp = new TextView(this);
@@ -173,29 +184,35 @@ public class nueva_ficha extends AppCompatActivity {
         fila.addView(descripcion, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView baseEuros = new TextView(this);
-        DecimalFormat formatter = new DecimalFormat("###.00");
-        baseEuros.setText(formatter.format(linea.base));
+
+        Currency eur = Currency.getInstance("EUR");
+        NumberFormat eurFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+        eurFormatter.setCurrency(eur);
+
+        DecimalFormat formatter = (DecimalFormat)NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+        formatter.applyLocalizedPattern("#0,00");
+        baseEuros.setText(eurFormatter.format(linea.base));
         baseEuros.setTextSize(20);
         baseEuros.setTextColor(getResources().getColor(R.color.black));
         baseEuros.setGravity(Gravity.CENTER);
         fila.addView(baseEuros, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView descuentoPorcg = new TextView(this);
-        descuentoPorcg.setText(formatter.format(linea.descuentoPorc));
+        descuentoPorcg.setText(formatter.format(linea.descuentoPorc) + " %");
         descuentoPorcg.setTextSize(20);
         descuentoPorcg.setTextColor(getResources().getColor(R.color.black));
         descuentoPorcg.setGravity(Gravity.CENTER);
         fila.addView(descuentoPorcg, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView ivaPorcg = new TextView(this);
-        ivaPorcg.setText(formatter.format(linea.ivaPorc));
+        ivaPorcg.setText(formatter.format(linea.ivaPorc) + " %");
         ivaPorcg.setTextSize(20);
         ivaPorcg.setTextColor(getResources().getColor(R.color.black));
         ivaPorcg.setGravity(Gravity.CENTER);
         fila.addView(ivaPorcg, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView totalPorcg = new TextView(this);
-        totalPorcg.setText(formatter.format(linea.total));
+        totalPorcg.setText(eurFormatter.format(linea.total));
         totalPorcg.setTextSize(20);
         totalPorcg.setTextColor(getResources().getColor(R.color.black));
         totalPorcg.setGravity(Gravity.CENTER);
@@ -206,6 +223,16 @@ public class nueva_ficha extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
 
+    }
+
+    private void modificar(View v) {
+        try {
+            DatosFichaLinea linea = (DatosFichaLinea)v.getTag();
+            dialog_new_line dlg = new dialog_new_line(nueva_ficha.this, nueva_ficha.this);
+            dlg.cargaModificacion(linea);
+        } catch (Exception ex){
+            Toast.makeText(nueva_ficha.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

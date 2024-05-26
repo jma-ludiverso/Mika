@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +36,7 @@ public class dialog_new_line{
     EditText edtxtBaseE;
     Spinner spnServicio;
     EditText edtxtDesc;
+    EditText edtxtDescrpcion;
     EditText edtxtIva;
     EditText edtxtTotal;
     String empleadoSeleccionado;
@@ -42,6 +44,7 @@ public class dialog_new_line{
     DatosServicios servicioSelecionado;
     ImageView imgTipo;
     float catDesc = 0;
+    boolean cambiando = false;
 
     public dialog_new_line (Context contexto, Activity act) {
         final  Dialog dialog = new Dialog(contexto);
@@ -61,7 +64,7 @@ public class dialog_new_line{
         imgTipo = (ImageView) dialog.findViewById(R.id.imgTipo);
         TextView txtTipo = (TextView) dialog.findViewById(R.id.txtTipo);
         TextView txtDescripcion = (TextView) dialog.findViewById(R.id.txtDescripcion);
-        EditText edtxtDescrpcion = (EditText) dialog.findViewById(R.id.edtxtDescrpcion);
+        edtxtDescrpcion = (EditText) dialog.findViewById(R.id.edtxtDescrpcion);
         txtBase = (TextView) dialog.findViewById(R.id.txtBase);
         edtxtBaseE = (EditText) dialog.findViewById(R.id.edtxtBaseE);
         TextView txtDescuento = (TextView) dialog.findViewById(R.id.txtDescuento);
@@ -181,7 +184,11 @@ public class dialog_new_line{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                CalculateDesc();
+                if(!cambiando){
+                    cambiando = true;
+                    CalculateDesc();
+                    cambiando = false;
+                }
             }
 
             @Override
@@ -190,7 +197,74 @@ public class dialog_new_line{
             }
         });
 
+
+        edtxtDesc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!cambiando){
+                    cambiando = true;
+                    CalculateDesc();
+                    cambiando = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        edtxtIva.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!cambiando){
+                    cambiando = true;
+                    CalculateIva();
+                    cambiando = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        edtxtTotal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!cambiando){
+                    cambiando = true;
+                    CalculatePVP();
+                    cambiando = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //
+            }
+        });
+
         dialog.show();
+
     }
 
     private void cargaEmpleados() {
@@ -223,6 +297,22 @@ public class dialog_new_line{
         } catch (Exception ex){
             Toast.makeText(dialogContext, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void cargaModificacion(DatosFichaLinea linea){
+        Adapter_empleado adaptador = (Adapter_empleado) spnEmpleado.getAdapter();
+        spnEmpleado.setSelection(adaptador.getPosition(linea.codigo));
+        Adapter_servicio adaptador2 = (Adapter_servicio) spnServicio.getAdapter();
+        spnServicio.setSelection(adaptador2.getPosition(linea.codServicio));
+        edtxtDescrpcion.setText(linea.descripcion);
+        cambiando = true;
+        edtxtBaseE.setText(String.valueOf(linea.base));
+        edtxtDesc.setText(String.valueOf(linea.descuentoPorc));
+        catDesc = linea.descuentoCant;
+        edtxtIva.setText(String.valueOf(linea.ivaPorc));
+        //servicioSelecionado.ivaCant = linea.ivaCant;
+        edtxtTotal.setText(String.valueOf(linea.total));
+        cambiando = false;
     }
 
     @SuppressLint("Range")
@@ -269,11 +359,11 @@ public class dialog_new_line{
     private void CalculateDesc()
     {
         //debe saltar si cambia el precio base o el porcentaje de descuento
-        if (edtxtDesc.getText().equals(""))
+        if (edtxtDesc.getText().toString().equals(""))
         {
             edtxtDesc.setText("0");
         }
-        if (edtxtBaseE.getText().equals(""))
+        if (edtxtBaseE.getText().toString().equals(""))
         {
             edtxtBaseE.setText("0");
         }
@@ -282,37 +372,41 @@ public class dialog_new_line{
         float cantidad = precio * (desc / 100);
         catDesc = cantidad;
         this.CalculateIva();
-        this.CalculatePVP();
+        //this.CalculatePVP();
 }
 
     private void CalculateIva()
     {
         //debe saltar si cambia el porcentaje de iva
         //(hay que ajustar los nombres de los editText y de la variable servicio seleccionado a los correctos)
-        if (edtxtBaseE.getText().equals(""))
+        if (edtxtBaseE.getText().toString().equals(""))
         {
             edtxtBaseE.setText("0");
         }
-        if (edtxtIva.getText().equals(""))
+        if (edtxtIva.getText().toString().equals(""))
         {
             edtxtIva.setText("0");
         }
         float precio = Float.parseFloat(edtxtBaseE.getText().toString());
         float iva = Float.parseFloat(edtxtIva.getText().toString());
         float cantidad = (precio - catDesc) * (iva / 100);
-        servicioSelecionado.ivaCant = cantidad;
-        this.CalculatePVP();
+        if (servicioSelecionado != null){
+            servicioSelecionado.ivaCant = cantidad;
+        }
+        float total = (precio - catDesc) + cantidad;
+        edtxtTotal.setText(String.valueOf(total));
+        //this.CalculatePVP();
     }
 
     private void CalculatePVP()
     {
         //debe saltar si cambia el precio total
         //(hay que ajustar los nombres de los editText y de la variable servicio seleccionado a los correctos)
-        if (edtxtTotal.getText().equals(""))
+        if (edtxtTotal.getText().toString().equals(""))
         {
             edtxtTotal.setText("0");
         }
-        if (edtxtIva.getText().equals(""))
+        if (edtxtIva.getText().toString().equals(""))
         {
             edtxtIva.setText("0");
         }

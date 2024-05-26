@@ -37,6 +37,17 @@ public class Adapter_servicio extends BaseAdapter {
         return 0;
     }
 
+    public int getPosition(String codigo){
+        int position = 0;
+        for(int i=0; i<= lstServicios.size()-1;i++){
+            if(lstServicios.get(i).codigo.equals((codigo))){
+                position = i;
+                break;
+            }
+        }
+        return position;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.fila_spinner, null);
