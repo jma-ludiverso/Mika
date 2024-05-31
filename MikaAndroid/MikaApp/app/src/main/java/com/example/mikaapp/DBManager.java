@@ -292,7 +292,7 @@ public class DBManager {
         }
     }
 
-    private void insertFichas(List<DatosFicha> data) {
+    public void insertFichas(List<DatosFicha> data) {
         try {
             for (DatosFicha ficha : data) {
 
@@ -315,8 +315,15 @@ public class DBManager {
                 values.put(DBStructure.FICHAS_CAMBIO, ficha.cambio);
                 values.put(DBStructure.FICHAS_CERRADA, ficha.cerrada);
 
-                // Insertar los datos de la ficha en la base de datos
-                mDb.insert(DBStructure.TABLE_FICHAS, null, values);
+                if (ficha.nFichaAnterior.equals("")){
+                    // Insertar los datos de la ficha en la base de datos
+                    mDb.insert(DBStructure.TABLE_FICHAS, null, values);
+                } else {
+                    String where = DBStructure.FICHAS_NFICHA + "=? and " + DBStructure.FICHAS_IDSALON + "=?";
+                    mDb.update(DBStructure.TABLE_FICHAS, values, where, new String[]{ficha.nFichaAnterior, String.valueOf(ficha.idSalon)});
+                }
+
+                this.insertFichasLineas(ficha.lineas, ficha.nFichaAnterior);
             }
 
         } catch (Exception ex) {
@@ -324,7 +331,7 @@ public class DBManager {
         }
     }
 
-    private void insertFichasLineas(List<DatosFichaLinea> data) {
+    private void insertFichasLineas(List<DatosFichaLinea> data, String nFichaAnterior) {
         try {
             for (DatosFichaLinea linea : data) {
 
@@ -347,7 +354,11 @@ public class DBManager {
                 values.put(DBStructure.FICHASLINEAS_COMISIONP4, linea.comisionP4);
 
                 // Insertar los datos de la línea de ficha en la base de datos
-                mDb.insert(DBStructure.TABLE_FICHASLINEAS, null, values);
+                long result = mDb.insert(DBStructure.TABLE_FICHASLINEAS, null, values);
+                if (result == -1){
+                    String where = DBStructure.FICHAS_NFICHA + "=? and " + DBStructure.FICHAS_IDSALON + "=? and " + DBStructure.FICHASLINEAS_LINEA + "=?";
+                    mDb.update(DBStructure.TABLE_FICHASLINEAS, values, where, new String[]{nFichaAnterior, String.valueOf(linea.idSalon), String.valueOf(linea.linea)});
+                }
             }
 
         } catch (Exception ex) {

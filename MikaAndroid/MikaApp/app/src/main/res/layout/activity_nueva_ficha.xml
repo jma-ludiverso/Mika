@@ -124,7 +124,7 @@
             android:id="@+id/ib_calendario"
             android:layout_width="56dp"
             android:layout_height="55dp"
-            android:onClick="abrirCalendario"
+            android:onClick="abrirCalendarioFicha"
             app:srcCompat="@drawable/calendary" />
 
         <TextView
@@ -187,11 +187,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="51dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/>
 
         <TextView
             android:id="@+id/txtPago"
@@ -267,11 +269,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/> />
 
         <TextView
             android:id="@+id/txtDescuento"
@@ -289,11 +293,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/>
 
         <TextView
             android:id="@+id/txtPagado"
@@ -344,11 +350,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/> />
 
         <TextView
             android:id="@+id/txtIva"
@@ -366,11 +374,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="70dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/>
 
         <TextView
             android:id="@+id/txtCambio"
@@ -388,11 +398,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="4dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/>
 
     </TableRow>
 
@@ -420,14 +432,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="50dp"
-            android:background="@drawable/rounded_edittext_bg"
+            android:background="@drawable/rounded_edittext_grey"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"
-            android:hint="0" />
+            android:text="0"
+            android:textColor="@color/black"
+            android:enabled="false"/>
 
         <Button
             android:id="@+id/b_Guardar"
+            android:visibility="invisible"
             android:onClick="guardarDatos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -443,7 +458,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:backgroundTint="@color/verde_material"
-            android:text="Guardar y cerrar ficha"
+            android:text="Guardar ficha"
             android:textSize="15dp"
             android:textAllCaps="false" />
     </TableRow>
@@ -464,6 +479,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/grey"
+            android:visibility="invisible"
             android:drawableLeft="@drawable/fichon"
             android:onClick="ver_Historial"
             android:text="Historial Cliente"
@@ -477,6 +493,7 @@
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/grey"
             android:drawableLeft="@drawable/fichon"
+            android:visibility="invisible"
             android:onClick="ver_UltimasFichas"
             android:text="Últimas fichas"
             android:textAllCaps="false" />
@@ -486,6 +503,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="550dp"
+            android:visibility="invisible"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/grey"
             android:drawableLeft="@drawable/ticketroja"
