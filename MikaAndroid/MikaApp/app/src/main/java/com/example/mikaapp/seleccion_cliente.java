@@ -101,7 +101,7 @@ public class seleccion_cliente extends AppCompatActivity {
             Calendar cal = Calendar.getInstance();
             ActiveData.Ficha.fecha = dateFormat.format(cal.getTime());
             ActiveData.Ficha.anio = cal.get(Calendar.YEAR);
-            ActiveData.Ficha.mes = cal.get(Calendar.MONTH);
+            ActiveData.Ficha.mes = cal.get(Calendar.MONTH)+1;
             ActiveData.Ficha.formaPago = "Tarjeta";
             ActiveData.Ficha.descuentos = 0;
             ActiveData.Ficha.descuentoPorc = 0;
@@ -113,6 +113,7 @@ public class seleccion_cliente extends AppCompatActivity {
             ActiveData.Ficha.lineas = new ArrayList<>();
             ActiveData.Ficha.numero = this.numeroFicha(ActiveData.Ficha.anio, ActiveData.Ficha.mes);
             ActiveData.Ficha.nFicha = String.valueOf(ActiveData.Ficha.anio) + String.format("%02d", ActiveData.Ficha.mes) + String.format("%03d", ActiveData.Ficha.numero);
+            ActiveData.Ficha.nFichaAnterior = "";
             startActivity(i);
 
         }catch (Exception ex){

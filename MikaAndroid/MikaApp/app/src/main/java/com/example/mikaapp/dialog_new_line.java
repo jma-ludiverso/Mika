@@ -45,6 +45,8 @@ public class dialog_new_line{
     ImageView imgTipo;
     float catDesc = 0;
     boolean cambiando = false;
+    DatosFichaLinea lineaModificacion = null;
+    int nLinea = 0;
 
     public dialog_new_line (Context contexto, Activity act) {
         final  Dialog dialog = new Dialog(contexto);
@@ -122,6 +124,10 @@ public class dialog_new_line{
                         imgTipo.setImageResource(R.drawable.tijeras);
                     }
                     servicioSelecionado = serv;
+                    if(lineaModificacion!=null){
+                        cargaModificacion();
+                        lineaModificacion = null;
+                    }
                 }
 
             }
@@ -155,7 +161,7 @@ public class dialog_new_line{
                     linea.descuentoCant = catDesc;
                     linea.idSalon = ActiveData.Ficha.idSalon;
                     linea.ivaCant = servicioSelecionado.ivaCant;
-                    linea.linea = 0;
+                    linea.linea = nLinea;
                     linea.nFicha = ActiveData.Ficha.nFicha;
                     linea.nEmpleado = nombreEmpleado;
                     linea.tipo = servicioSelecionado.tipo;
@@ -167,7 +173,7 @@ public class dialog_new_line{
                     linea.comisionP4 = 0;
 
 
-                    ficha.datosLinea(linea);
+                    ficha.datosLinea(linea, false);
                     dialog.dismiss();
                 } else {
                     Toast.makeText(dialogContext, "Debe seleccionar un empleado y un servicio ", Toast.LENGTH_SHORT).show();
@@ -299,20 +305,25 @@ public class dialog_new_line{
         }
     }
 
-    public void cargaModificacion(DatosFichaLinea linea){
-        Adapter_empleado adaptador = (Adapter_empleado) spnEmpleado.getAdapter();
-        spnEmpleado.setSelection(adaptador.getPosition(linea.codigo));
-        Adapter_servicio adaptador2 = (Adapter_servicio) spnServicio.getAdapter();
-        spnServicio.setSelection(adaptador2.getPosition(linea.codServicio));
-        edtxtDescrpcion.setText(linea.descripcion);
+    private void cargaModificacion(){
+        edtxtDescrpcion.setText(lineaModificacion.descripcion);
         cambiando = true;
-        edtxtBaseE.setText(String.valueOf(linea.base));
-        edtxtDesc.setText(String.valueOf(linea.descuentoPorc));
-        catDesc = linea.descuentoCant;
-        edtxtIva.setText(String.valueOf(linea.ivaPorc));
-        //servicioSelecionado.ivaCant = linea.ivaCant;
-        edtxtTotal.setText(String.valueOf(linea.total));
+        edtxtBaseE.setText(String.valueOf(lineaModificacion.base));
+        edtxtDesc.setText(String.valueOf(lineaModificacion.descuentoPorc));
+        catDesc = lineaModificacion.descuentoCant;
+        edtxtIva.setText(String.valueOf(lineaModificacion.ivaPorc));
+        servicioSelecionado.ivaCant = lineaModificacion.ivaCant;
+        edtxtTotal.setText(String.valueOf(lineaModificacion.total));
         cambiando = false;
+    }
+
+    public void cargaModificacion(DatosFichaLinea linea){
+        lineaModificacion = linea;
+        nLinea = linea.linea;
+        Adapter_empleado adaptador = (Adapter_empleado) spnEmpleado.getAdapter();
+        spnEmpleado.setSelection(adaptador.getPosition(lineaModificacion.codigo), false);
+        Adapter_servicio adaptador2 = (Adapter_servicio) spnServicio.getAdapter();
+        spnServicio.setSelection(adaptador2.getPosition(lineaModificacion.codServicio), false);
     }
 
     @SuppressLint("Range")

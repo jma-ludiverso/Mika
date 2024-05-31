@@ -4,6 +4,7 @@ import java.util.List;
 
 public class DatosFicha {
     public String nFicha;
+    public String nFichaAnterior;
     public String fecha;
     public int anio;
     public int mes;
