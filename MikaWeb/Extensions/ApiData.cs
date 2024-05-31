@@ -1,8 +1,11 @@
-﻿using MikaWeb.Extensions.DB;
+﻿using Microsoft.AspNetCore.Mvc;
+using MikaWeb.Extensions.DB;
+using MikaWeb.Models;
 using MikaWeb.Models.API;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using static NPOI.HSSF.Util.HSSFColor;
 
@@ -279,6 +282,60 @@ namespace MikaWeb.Extensions
             }
             catch
             {
+                throw;
+            }
+        }
+
+        public async Task<bool> setClientData(ClientData data)
+        {
+            DBExtension db = new DBExtension(_dbConfig.MikaWebContextConnection);
+            SqlTransaction t = null;
+            try
+            {                
+                t = db.GetTransaction();
+                if (data.ListaClientes != null)
+                {
+                    if (data.ListaClientes.Count > 0)
+                    {
+                        ClientesExtension cliExt = new ClientesExtension(db);
+                        foreach(Cliente cli in data.ListaClientes)
+                        {
+                            //se descarta el id dado temporalmente en la app de android y se pone a -1 para que se cree nuevo
+                            cli.IdCliente = -1;
+                            bool result = await cliExt.SaveClient(cli, "", t);
+                        }    
+                    }
+                }
+                if(data.Fichas != null)
+                {
+                    if(data.Fichas.Count > 0)
+                    {
+                        FichasExtension fext = new FichasExtension(db);
+                        for (int i = 0; i <= data.Fichas.Count - 1; i++) 
+                        {
+                            //se descarta el número de ficha asignado temporalmente en la app de android y se pone a "(sin guardar)" para que se creee nueva
+                            //para cada línea de la ficha también se pone a 0 el número de línea para que se cree nueva
+                            Ficha f = data.Fichas[i];
+                            f.NFicha = "(sin guardar)";
+                            f = await fext.guarda_Ficha(f, t);
+                            for (int j = 0; j <= f.Lineas.Count -1; j++)
+                            {
+                                Ficha_Linea fl = f.Lineas[j];
+                                fl = await fext.guardaLinea(fl, f.NFicha, f.IdSalon, f.DescuentoPorc, t);
+                            }
+                        }
+                    }
+                }
+                db.CommitTransaction(t);
+                db.Close();
+                return true;
+            }catch
+            {
+                try
+                {
+                    t.Rollback();
+                    db.Close();
+                }catch { }
                 throw;
             }
         }

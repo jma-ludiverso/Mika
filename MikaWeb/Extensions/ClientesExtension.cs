@@ -88,6 +88,44 @@ namespace MikaWeb.Extensions
             }
         }
 
+        public async Task<List<Cliente>> getClientsData(string salon, string search, int idcli = 0)
+        {
+            try
+            {
+                List<Cliente> ret = new List<Cliente>();
+                SqlCommand sc = new SqlCommand();
+                string sql = "Select ";
+                sql += "IdCliente, Nombre From Clientes Where IdSalon=@sal and ";
+                sc.Parameters.AddWithValue("@sal", salon);
+                if (!string.IsNullOrEmpty(search))
+                {
+                    sql += "Nombre like @nombre";
+                    sc.Parameters.AddWithValue("@nombre", "%" + search + "%");
+                }
+                else
+                {
+                    sql += "IdCliente=@cli";
+                    sc.Parameters.AddWithValue("@cli", idcli);
+                }
+                sql += " order by nombre";
+                sc.CommandText = sql;
+                DataSet ds = await db.GetDataSet(sc, "clientes");
+                for (int i = 0; i <= ds.Tables["clientes"].Rows.Count - 1; i++)
+                {
+                    DataRow fila = ds.Tables["clientes"].Rows[i];
+                    Cliente c = new Cliente();
+                    c.IdCliente = int.Parse(fila["IdCliente"].ToString());
+                    c.Nombre = fila["Nombre"].ToString();
+                    ret.Add(c);
+                }
+                return ret;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         private async Task<int> GetId(SqlTransaction t)
         {
             try
@@ -131,12 +169,16 @@ namespace MikaWeb.Extensions
             return ret;
         }
 
-        public async Task<bool> SaveClient(Cliente data, string newRecordData = "")
+        public async Task<bool> SaveClient(Cliente data, string newRecordData = "", SqlTransaction t = null)
         {
-            SqlTransaction t = null;
+            bool localTransaction = false;
             try
-            { 
-                t = db.GetTransaction();
+            {
+                if (t == null)
+                {
+                    t = db.GetTransaction();
+                    localTransaction = true;
+                }
                 string sql = "";
                 SqlCommand sc = new SqlCommand();
                 sc.Transaction = t;
@@ -179,18 +221,22 @@ namespace MikaWeb.Extensions
                 {
                     Cliente_Historia hits = await this.SaveRecordData(data.IdCliente, newRecordData, t);
                 }
-                db.CommitTransaction(t);
+                if(localTransaction)
+                {
+                    db.CommitTransaction(t);
+                    db.Close();
+                }
                 return true;
             }
             catch 
             {
                 try
                 {
-                    if (t != null)
+                    if (localTransaction)
                     {
                         t.Rollback();
+                        db.Close();
                     }
-                    db.Close();
                 }
                 catch { };
                 throw;

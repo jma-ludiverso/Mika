@@ -8,6 +8,7 @@ using MikaWeb.Areas.Identity.Data;
 using MikaWeb.Extensions;
 using MikaWeb.Extensions.DB;
 using MikaWeb.Models.API;
+using NPOI.OpenXmlFormats.Dml;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -99,6 +100,28 @@ namespace MikaWeb.Controllers
                 return await data.GetServerData(request.Salon, identity.FindFirst(ClaimTypes.Sid).Value);
             }
             catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("setData")]
+        public async Task<ActionResult> setData(ClientData data)
+        {
+            try
+            {
+                ApiData appdata = new ApiData(_dbConfig);
+                bool result = await appdata.setClientData(data);
+                if(result)
+                {
+                    return Ok("DataSaved");
+                }
+                else
+                {
+                    throw new System.Exception();
+                }
+            }catch
             {
                 return BadRequest();
             }
