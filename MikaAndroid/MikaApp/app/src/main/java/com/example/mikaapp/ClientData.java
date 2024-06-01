@@ -4,5 +4,5 @@ import java.util.List;
 
 public class ClientData {
     public List<DatosFicha> fichas;
-    public List<DatosCliente> clientes;
+    public List<DatosCliente> listaClientes;
 }

@@ -7,8 +7,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class sincronizar extends AppCompatActivity {
     TextView txtCorreo;
@@ -32,14 +37,14 @@ public class sincronizar extends AppCompatActivity {
 
     }
 
-    private ClientData getData(){
+    private ClientData getData() throws Exception {
         try {
             DBManager mDbHelper = new DBManager(getApplicationContext());
             mDbHelper.open();
 
             ClientData data = new ClientData();
             data.fichas = this.getFichas(mDbHelper);
-            data.clientes = this.getClientes(mDbHelper);
+            data.listaClientes = this.getClientes(mDbHelper);
 
             mDbHelper.close();
 
@@ -49,7 +54,7 @@ public class sincronizar extends AppCompatActivity {
         }
     }
 
-    private List<DatosFicha> getFichas(DBManager mDbHelper){
+    private List<DatosFicha> getFichas(DBManager mDbHelper) throws Exception {
         try {
             List<DatosFicha> fichas = new ArrayList<>();
             //String nFicha = "";
@@ -78,8 +83,13 @@ public class sincronizar extends AppCompatActivity {
                     }
 
                     if (fichaActiva.lineas.size()==0){
-                        fichaActiva.nFicha = c.getString(28);;
-                        fichaActiva.fecha = c.getString(0);
+                        fichaActiva.nFicha = c.getString(28);
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                        formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
+                        Date fec = formatter.parse(c.getString(0));
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(fec);
+                        fichaActiva.fecha = String.valueOf(cal.get(Calendar.YEAR)) + "/" + String.valueOf(cal.get(Calendar.MONTH)+1) + "/" + String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
                         fichaActiva.anio = c.getInt(1);
                         fichaActiva.mes = c.getInt(2);
                         fichaActiva.numero = c.getInt(3);

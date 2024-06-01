@@ -90,15 +90,23 @@ public class Sincronizacion {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url + "setdata", jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    String resp = response.toString();
+                    DataResponse data = new Gson().fromJson(response.toString(), DataResponse.class);
+                    if (data.success){
+                        /*DBManager mDbHelper = new DBManager(ctxt);
+                        mDbHelper.open();
 
-                    /*DBManager mDbHelper = new DBManager(ctxt);
-                    mDbHelper.open();
+                        //TODO: nos falta usar el username y el token
+                        mDbHelper.InsertData(data);
 
-                    //TODO: nos falta usar el username y el token
-                    mDbHelper.InsertData(data);
-
-                    mDbHelper.close();*/
+                        mDbHelper.close();*/
+                    } else {
+                        //Manejar error de autenticación
+                        Toast.makeText(ctxt, "Error de sincronización.", Toast.LENGTH_LONG).show();
+                        // Redirigir al usuario al menú principal
+                        Intent intent = new Intent(ctxt, menu_principal.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctxt.startActivity(intent);
+                    }
 
                 }
             }, new Response.ErrorListener() {
