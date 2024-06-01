@@ -184,7 +184,6 @@ public class fichas_activas extends AppCompatActivity {
                         ActiveData.Ficha.pagado = c.getFloat(12);
                         ActiveData.Ficha.cambio = c.getFloat(13);
                         ActiveData.Ficha.nombreCliente = c.getString(14);
-                        ActiveData.Ficha.numero = Integer.parseInt(nFicha);
                         ActiveData.Ficha.idSalon = ActiveData.loginData.userData.salon;
                     }
                     DatosFichaLinea linea = new DatosFichaLinea();

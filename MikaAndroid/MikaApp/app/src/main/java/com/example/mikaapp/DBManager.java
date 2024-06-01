@@ -365,4 +365,13 @@ public class DBManager {
             throw ex;
         }
     }
+
+    public void eliminarLínea(DatosFichaLinea linea){
+        try {
+            String where = DBStructure.FICHAS_NFICHA + "=? and " + DBStructure.FICHAS_IDSALON + "=? and " + DBStructure.FICHASLINEAS_LINEA + "=?";
+            mDb.delete(DBStructure.TABLE_FICHASLINEAS, where, new String[]{linea.nFicha, String.valueOf(linea.idSalon), String.valueOf(linea.linea)});
+        } catch (Exception ex){
+            throw ex;
+        }
+    }
 }

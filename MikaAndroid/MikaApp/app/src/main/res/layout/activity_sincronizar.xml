@@ -71,11 +71,12 @@
         android:id="@+id/txtSincronizar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sincronizar"
-        android:textSize="30dp"
+        android:text="Sincronizando..."
         android:textColor="@color/whiteDarck"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.287" />
 </androidx.constraintlayout.widget.ConstraintLayout>

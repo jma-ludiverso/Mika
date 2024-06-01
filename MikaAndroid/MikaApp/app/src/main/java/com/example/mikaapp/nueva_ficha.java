@@ -512,6 +512,11 @@ public class nueva_ficha extends AppCompatActivity {
     private void eliminar(View v){
         try {
             DatosFichaLinea linea = (DatosFichaLinea)v.getTag();
+            DBManager db = new DBManager(getApplicationContext());
+            db.open();
+            db.eliminarLínea(linea);
+            db.close();
+
             TableRow fila = (TableRow) v.getParent().getParent();
             int index = lineas.indexOfChild(fila);
             lineas.removeViewAt(index);

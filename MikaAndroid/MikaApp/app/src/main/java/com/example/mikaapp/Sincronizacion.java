@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Sincronizacion {
@@ -79,6 +80,55 @@ public class Sincronizacion {
             Volley.newRequestQueue(ctxt).add(jsonObjectRequest);
 
         }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public void setData(ClientData data) throws Exception {
+        try {
+            JSONObject jsonObject = new JSONObject(new Gson().toJson(data));
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url + "setdata", jsonObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String resp = response.toString();
+
+                    /*DBManager mDbHelper = new DBManager(ctxt);
+                    mDbHelper.open();
+
+                    //TODO: nos falta usar el username y el token
+                    mDbHelper.InsertData(data);
+
+                    mDbHelper.close();*/
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    try {
+                        throw error;
+                    } catch (VolleyError e) {
+                        //throw new RuntimeException(e);
+
+                        //Manejar error de autenticación
+                        Toast.makeText(ctxt, "Error de sincronización.", Toast.LENGTH_LONG).show();
+                        // Redirigir al usuario al menú principal
+                        Intent intent = new Intent(ctxt, menu_principal.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctxt.startActivity(intent);
+                    }
+                }
+            })
+            {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+                }};
+
+            Volley.newRequestQueue(ctxt).add(jsonObjectRequest);
+
+        } catch (Exception ex){
             throw ex;
         }
     }
