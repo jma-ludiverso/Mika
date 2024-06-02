@@ -169,7 +169,7 @@ namespace MikaWeb.Extensions
             return ret;
         }
 
-        public async Task<bool> SaveClient(Cliente data, string newRecordData = "", SqlTransaction t = null)
+        public async Task<Cliente> SaveClient(Cliente data, string newRecordData = "", SqlTransaction t = null)
         {
             bool localTransaction = false;
             try
@@ -226,7 +226,7 @@ namespace MikaWeb.Extensions
                     db.CommitTransaction(t);
                     db.Close();
                 }
-                return true;
+                return data;
             }
             catch 
             {

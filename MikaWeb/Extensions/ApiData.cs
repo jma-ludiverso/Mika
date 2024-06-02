@@ -2,10 +2,13 @@
 using MikaWeb.Extensions.DB;
 using MikaWeb.Models;
 using MikaWeb.Models.API;
+using NPOI.SS.Formula.Functions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using static NPOI.HSSF.Util.HSSFColor;
 
@@ -298,11 +301,15 @@ namespace MikaWeb.Extensions
                     if (data.ListaClientes.Count > 0)
                     {
                         ClientesExtension cliExt = new ClientesExtension(db);
-                        foreach(Cliente cli in data.ListaClientes)
+                        for(int i=0; i<=data.ListaClientes.Count-1;i++)
                         {
+                            Cliente cli = data.ListaClientes[i];
                             //se descarta el id dado temporalmente en la app de android y se pone a -1 para que se cree nuevo
+                            //se actualizan los datos de las fichas del cliente cuyo id haya sido renumerado con el id asignado
+                            int IdAnterior = cli.IdCliente;
                             cli.IdCliente = -1;
-                            bool result = await cliExt.SaveClient(cli, "", t);
+                            cli = await cliExt.SaveClient(cli, "", t);
+                            data.Fichas = this.updateFichasCliente(data.Fichas, IdAnterior, cli.IdCliente);
                         }    
                     }
                 }
@@ -321,6 +328,7 @@ namespace MikaWeb.Extensions
                             for (int j = 0; j <= f.Lineas.Count -1; j++)
                             {
                                 Ficha_Linea fl = f.Lineas[j];
+                                fl.Linea = 0;
                                 fl = await fext.guardaLinea(fl, f.NFicha, f.IdSalon, f.DescuentoPorc, t);
                             }
                         }
@@ -336,6 +344,26 @@ namespace MikaWeb.Extensions
                     t.Rollback();
                     db.Close();
                 }catch { }
+                throw;
+            }
+        }
+
+        private List<Ficha> updateFichasCliente(List<Ficha> fichas, int IdAnterior, int IdNuevo)
+        {
+            try
+            {
+                if (fichas != null)
+                {
+                    var result = fichas.Where(f => f.IdCliente == IdAnterior);
+                    foreach(Ficha f in result)
+                    {
+                        f.IdCliente = IdNuevo;
+                    }
+                }
+                return fichas;
+            }
+            catch
+            {
                 throw;
             }
         }

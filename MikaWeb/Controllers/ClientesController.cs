@@ -58,7 +58,7 @@ namespace MikaWeb.Controllers
                         data.Cliente.Email = "";
                     }
                     ClientesExtension cliext = new ClientesExtension(db);
-                    bool result = await cliext.SaveClient(data.Cliente);
+                    data.Cliente = await cliext.SaveClient(data.Cliente);
                     data.Historial = await cliext.GetRecordData(Id);
                     ViewBag.StatusMessage = "Datos guardados";
                     return View(data);
@@ -181,7 +181,7 @@ namespace MikaWeb.Controllers
                     }
                     data.Cliente.IdCliente = -1;
                     ClientesExtension cliext = new ClientesExtension(new DBExtension(_dbConfig.MikaWebContextConnection));
-                    bool resul = await cliext.SaveClient(data.Cliente);
+                    data.Cliente = await cliext.SaveClient(data.Cliente);
                     return RedirectToAction("Index", "Clientes");
                 }
                 catch (Exception ex)

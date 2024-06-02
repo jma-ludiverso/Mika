@@ -10,6 +10,7 @@ using MikaWeb.Extensions.DB;
 using MikaWeb.Models.API;
 using NPOI.OpenXmlFormats.Dml;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MikaWeb.Controllers
@@ -107,24 +108,28 @@ namespace MikaWeb.Controllers
 
         [HttpPost]
         [Route("setData")]
-        public async Task<ActionResult> setData(ClientData data)
+        public async Task<ActionResult<DataResponse>> setData(ClientData data)
         {
+            DataResponse resp = new DataResponse();
             try
             {
                 ApiData appdata = new ApiData(_dbConfig);
                 bool result = await appdata.setClientData(data);
                 if(result)
                 {
-                    return Ok("DataSaved");
+                    resp.Success = true;
+                    resp.Result = "Data saved";
                 }
                 else
                 {
                     throw new System.Exception();
                 }
-            }catch
+            }catch (System.Exception ex) 
             {
-                return BadRequest();
+                resp.Success = false;
+                resp.Result = ex.Message;
             }
+            return resp;
         }
 
     }
