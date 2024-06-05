@@ -92,21 +92,21 @@ public class Sincronizacion {
                 public void onResponse(JSONObject response) {
                     DataResponse data = new Gson().fromJson(response.toString(), DataResponse.class);
                     if (data.success){
-                        /*DBManager mDbHelper = new DBManager(ctxt);
+                        DBManager mDbHelper = new DBManager(ctxt);
                         mDbHelper.open();
 
-                        //TODO: nos falta usar el username y el token
-                        mDbHelper.InsertData(data);
+                        mDbHelper.DeleteData();
 
-                        mDbHelper.close();*/
+                        mDbHelper.close();
+                        Toast.makeText(ctxt, "Datos actualizados en el servidor", Toast.LENGTH_LONG).show();
                     } else {
                         //Manejar error de autenticación
                         Toast.makeText(ctxt, "Error de sincronización.", Toast.LENGTH_LONG).show();
-                        // Redirigir al usuario al menú principal
-                        Intent intent = new Intent(ctxt, menu_principal.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        ctxt.startActivity(intent);
                     }
+                    // Redirigir al usuario al menú principal
+                    Intent intent = new Intent(ctxt, menu_principal.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ctxt.startActivity(intent);
 
                 }
             }, new Response.ErrorListener() {

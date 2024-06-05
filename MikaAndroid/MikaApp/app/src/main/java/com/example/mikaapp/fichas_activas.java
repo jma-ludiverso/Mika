@@ -18,9 +18,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,6 +71,10 @@ public class fichas_activas extends AppCompatActivity {
 
     private void cargaDatos() {
         try {
+            Currency eur = Currency.getInstance("EUR");
+            NumberFormat eurFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+            eurFormatter.setCurrency(eur);
+
             TableLayout tablaLineas = findViewById(R.id.tablaLineas);
             tablaLineas.removeViews(1, tablaLineas.getChildCount() - 1); // Eliminar todas las filas menos la cabecera
 
@@ -87,7 +93,7 @@ public class fichas_activas extends AppCompatActivity {
                     String nFicha = c.getString(0);
                     String cliente = c.getString(1);
                     String fecha = c.getString(2);
-                    String total = c.getString(3);
+                    float total = c.getFloat(3);
 
                     TableRow fila = new TableRow(this);
                     fila.setBackgroundColor(getResources().getColor(R.color.lightgrey));
@@ -122,7 +128,7 @@ public class fichas_activas extends AppCompatActivity {
                     fila.addView(txtFecha, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
 
                     TextView txtTotal = new TextView(this);
-                    txtTotal.setText(total);
+                    txtTotal.setText(eurFormatter.format(total));
                     txtTotal.setTextSize(20);
                     txtTotal.setTextColor(getResources().getColor(R.color.black));
                     txtTotal.setGravity(Gravity.CENTER);

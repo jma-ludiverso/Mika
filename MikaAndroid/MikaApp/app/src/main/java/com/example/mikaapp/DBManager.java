@@ -70,6 +70,16 @@ public class DBManager {
         }
     }
 
+    public void DeleteData(){
+        try{
+            mDb.delete(DBStructure.TABLE_CLIENTES, "", new String[]{});
+            mDb.delete(DBStructure.TABLE_FICHASLINEAS, "", new String[]{});
+            mDb.delete(DBStructure.TABLE_FICHAS, "", new String[]{});
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
     public void InsertData(DatosMika data){
         try{
 

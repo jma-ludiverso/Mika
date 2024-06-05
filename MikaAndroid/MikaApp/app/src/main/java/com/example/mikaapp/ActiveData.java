@@ -2,28 +2,20 @@ package com.example.mikaapp;
 
 import android.content.Context;
 
-/**
- * Mantiene los datos de sesión en memoria
- */
+//Mantiene los datos de sesion en memoria
 public class ActiveData {
 
-    /**
-     * Datos del usuario activo en la aplicación
-     */
+    //Datos del usuario activo en la aplicacion
     static AuthenticateResponse loginData;
-    /**
-     * Datos de la ficha con la que se está trabajando
-     */
+    //Datos de la ficha con la que se esta trabajando
     static DatosFicha Ficha;
-    /**
-     * Identifica si es necesaria o no una sincronización con el servidor
-     */
+    //Identifica si es necesaria o no una sincronizacion con el servidor
     static boolean sincronizar;
 
-    /**
-     * Recibe los datos de autenticación del usuario y los guarda en la base de datos local si procede
-     * @param data datos de respuesta de la autenticación del usuario
-     * @param ctxt contexto del entorno de la aplicación
+    /*
+      Recibe los datos de autenticacion del usuario y los guarda en la base de datos local si procede
+      @param data datos de respuesta de la autenticacion del usuario
+      @param ctxt contexto del entorno de la aplicacion
      */
     public static void setLoginData(AuthenticateResponse data, Context ctxt){
         loginData = data;
