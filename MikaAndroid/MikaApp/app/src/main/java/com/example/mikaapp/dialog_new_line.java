@@ -26,8 +26,11 @@ import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class dialog_new_line{
     Context dialogContext;
@@ -112,11 +115,20 @@ public class dialog_new_line{
                     imgTipo.setImageResource(android.R.color.transparent);
                     servicioSelecionado = null;
                 } else {
+
+                    DecimalFormat formatterBase = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+                    formatterBase.applyLocalizedPattern("#0,00");
+                    formatterBase.setMaximumFractionDigits(3);
+
+                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+                    formatter.applyLocalizedPattern("#0,00");
+                    formatter.setMaximumFractionDigits(2);
+
                     edtxtDescrpcion.setText(serv.nombre);
-                    edtxtBaseE.setText(String.valueOf(serv.precio));
+                    edtxtBaseE.setText(formatterBase.format(serv.precio));
                     edtxtDesc.setText("0");
-                    edtxtIva.setText(String.valueOf(serv.ivaPorc));
-                    edtxtTotal.setText(String.valueOf(serv.pvp));
+                    edtxtIva.setText(formatter.format(serv.ivaPorc));
+                    edtxtTotal.setText(formatter.format(serv.pvp));
 
                     if(serv.tipo.equals("Producto")){
                         imgTipo.setImageResource(R.drawable.p);
@@ -308,12 +320,21 @@ public class dialog_new_line{
     private void cargaModificacion(){
         edtxtDescrpcion.setText(lineaModificacion.descripcion);
         cambiando = true;
-        edtxtBaseE.setText(String.valueOf(lineaModificacion.base));
-        edtxtDesc.setText(String.valueOf(lineaModificacion.descuentoPorc));
+
+        DecimalFormat formatterBase = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+        formatterBase.applyLocalizedPattern("#0,00");
+        formatterBase.setMaximumFractionDigits(3);
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+        formatter.applyLocalizedPattern("#0,00");
+        formatter.setMaximumFractionDigits(2);
+
+        edtxtBaseE.setText(formatterBase.format(lineaModificacion.base));
+        edtxtDesc.setText(formatter.format(lineaModificacion.descuentoPorc));
         catDesc = lineaModificacion.descuentoCant;
-        edtxtIva.setText(String.valueOf(lineaModificacion.ivaPorc));
+        edtxtIva.setText(formatter.format(lineaModificacion.ivaPorc));
         servicioSelecionado.ivaCant = lineaModificacion.ivaCant;
-        edtxtTotal.setText(String.valueOf(lineaModificacion.total));
+        edtxtTotal.setText(formatter.format(lineaModificacion.total));
         cambiando = false;
     }
 
@@ -383,7 +404,6 @@ public class dialog_new_line{
         float cantidad = precio * (desc / 100);
         catDesc = cantidad;
         this.CalculateIva();
-        //this.CalculatePVP();
 }
 
     private void CalculateIva()
@@ -405,7 +425,12 @@ public class dialog_new_line{
             servicioSelecionado.ivaCant = cantidad;
         }
         float total = (precio - catDesc) + cantidad;
-        edtxtTotal.setText(String.valueOf(total));
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+        formatter.applyLocalizedPattern("#0,00");
+        formatter.setMaximumFractionDigits(2);
+
+        edtxtTotal.setText(formatter.format(total));
         //this.CalculatePVP();
     }
 
@@ -424,7 +449,12 @@ public class dialog_new_line{
         float precio = Float.parseFloat(edtxtTotal.getText().toString());
         float iva = Float.parseFloat(edtxtIva.getText().toString());
         float preciobase = precio / ((iva / 100) + 1);
-        edtxtBaseE.setText(String.valueOf(preciobase));
+
+        DecimalFormat formatterBase = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
+        formatterBase.applyLocalizedPattern("#0,00");
+        formatterBase.setMaximumFractionDigits(3);
+
+        edtxtBaseE.setText(formatterBase.format(preciobase));
         edtxtDesc.setText("0");
         if (servicioSelecionado != null){
             servicioSelecionado.ivaCant = precio - preciobase;

@@ -31,11 +31,11 @@
         <activity
             android:name=".nueva_ficha"
             android:exported="false"
-            android:parentActivityName=".seleccion_cliente" />
+            android:parentActivityName=".menu_principal" />
         <activity
             android:name=".fichas_activas"
             android:exported="false"
-            android:parentActivityName=".seleccion_cliente" />
+            android:parentActivityName=".menu_principal" />
         <activity
             android:name=".menu_principal"
             android:exported="false" />
