@@ -181,6 +181,7 @@ public class nueva_ficha extends AppCompatActivity {
             ActiveData.Ficha.total = Float.parseFloat(total.getText().toString().replace(",", "."));
             ActiveData.Ficha.pagado = Float.parseFloat(pagado.getText().toString().replace(",", "."));
             ActiveData.Ficha.cambio = Float.parseFloat(cambio.getText().toString().replace(",", "."));
+            ActiveData.Ficha.fecha = date.getText().toString();
 
             if (formaPago.getCheckedRadioButtonId()==R.id.rb_Efectivo) {
                 ActiveData.Ficha.formaPago ="Efectivo";
@@ -264,6 +265,9 @@ public class nueva_ficha extends AppCompatActivity {
         descuento.setText(formatter.format(ActiveData.Ficha.descuentoPorc));
         pagado.setText(formatter.format(ActiveData.Ficha.pagado));
         cambio.setText(formatter.format(ActiveData.Ficha.cambio));
+        if(ActiveData.Ficha.formaPago==null){
+            ActiveData.Ficha.formaPago = "Tarjeta";
+        }
         if (ActiveData.Ficha.formaPago.equals("Tarjeta")){
             formaPago.check(R.id.rb_Tarjeta);
         } else {
@@ -344,8 +348,15 @@ public class nueva_ficha extends AppCompatActivity {
             this.datosLinea_Add(linea, eurFormatter, formatter);
         } else {
             if(add){
+                //por aquí pasa cuando carga en pantalla una ficha existente
                 this.datosLinea_Add(linea, eurFormatter, formatter);
             }else{
+                for(int i=0; i<=ActiveData.Ficha.lineas.size()-1;i++){
+                    if(ActiveData.Ficha.lineas.get(i).linea==linea.linea){
+                        ActiveData.Ficha.lineas.set(i, linea);
+                        break;
+                    }
+                }
                 this.datosLinea_Edit(linea, eurFormatter, formatter);
             }
         }

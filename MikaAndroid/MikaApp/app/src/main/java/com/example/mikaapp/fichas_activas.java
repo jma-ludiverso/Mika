@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,9 +28,13 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import android.widget.Switch;
+
 public class fichas_activas extends AppCompatActivity {
     TextView txtCorreo;
     TextView date;
+    ImageButton CaldButn;
+    private Switch mySwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +54,30 @@ public class fichas_activas extends AppCompatActivity {
         date.setText(fechaActual);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        CaldButn = findViewById(R.id.ib_calendario);
+
+        mySwitch = findViewById(R.id.mySwitch);
+        //mySwitch.setText("Mostrar por día");
+
         cargaDatos();
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    CaldButn.setVisibility(View.VISIBLE);
+                    date.setVisibility(View.VISIBLE);
+                    Toast.makeText(fichas_activas.this, "Mostrando fichas del día seleccionado", Toast.LENGTH_SHORT).show();
+                } else {
+                    CaldButn.setVisibility(View.INVISIBLE);
+                    date.setVisibility(View.INVISIBLE);
+                    Toast.makeText(fichas_activas.this, "Mostrando todas las fichas pendientes de sincronizar", Toast.LENGTH_SHORT).show();
+                }
+                cargaDatos();
+            }
+        });
     }
 
     public void abrirCalendario(View view){
@@ -81,11 +110,23 @@ public class fichas_activas extends AppCompatActivity {
             DBManager mDbHelper = new DBManager(getApplicationContext());
             mDbHelper.open();
 
-            String sql = "select f.NFicha, c.Nombre as Cliente, f.Fecha, f.Total " +
-                    "from Fichas f " +
-                    "inner join Clientes c on c.idSalon=f.IdSalon and c.idCliente=f.idCliente " +
-                    "where f.IdSalon=? and f.Fecha=? Order by f.NFicha";
-            Cursor c = mDbHelper.getData(sql, new String[]{String.valueOf(ActiveData.loginData.userData.salon), date.getText().toString()});
+            Cursor c = null;
+
+            if (mySwitch.isChecked()){
+                //se consulta la fecha seleccionada
+                String sql = "select f.NFicha, c.Nombre as Cliente, f.Fecha, f.Total " +
+                        "from Fichas f " +
+                        "inner join Clientes c on c.idSalon=f.IdSalon and c.idCliente=f.idCliente " +
+                        "where f.IdSalon=? and f.Fecha=? Order by f.NFicha";
+                c = mDbHelper.getData(sql, new String[]{String.valueOf(ActiveData.loginData.userData.salon), date.getText().toString()});
+            } else {
+                //se muestran todas las fichas
+                String sql = "select f.NFicha, c.Nombre as Cliente, f.Fecha, f.Total " +
+                        "from Fichas f " +
+                        "inner join Clientes c on c.idSalon=f.IdSalon and c.idCliente=f.idCliente " +
+                        "where f.IdSalon=? Order by f.NFicha";
+               c = mDbHelper.getData(sql, new String[]{String.valueOf(ActiveData.loginData.userData.salon)});
+            }
 
             if (c != null && c.getCount() > 0) {
 
@@ -169,6 +210,7 @@ public class fichas_activas extends AppCompatActivity {
                     "inner join AspNetUsers emp on emp.Salon=fl.idsalon and emp.Codigo=fl.Codigo\n" +
                     "where f.NFicha=? and f.idSalon=?\n" +
                     "ORDER BY fl.Linea ";
+
             Cursor c = mDbHelper.getData(sql, new String[]{nFicha, String.valueOf(ActiveData.loginData.userData.salon)});
             if(c != null && c.getCount()>0){
                 while (c.moveToNext()){

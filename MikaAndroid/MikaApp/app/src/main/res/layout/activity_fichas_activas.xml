@@ -85,6 +85,7 @@
             android:layout_marginLeft="570dp"
             android:layout_marginTop="15dp"
             android:text="00/00/0000"
+            android:visibility="invisible"
             android:textColor="@color/white"
             android:textSize="20dp" />
 
@@ -94,9 +95,22 @@
             android:layout_height="55dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="30dp"
+            android:visibility="invisible"
             android:onClick="abrirCalendario"
             app:srcCompat="@drawable/calendary" />
     </TableRow>
+
+    <Switch
+        android:id="@+id/mySwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="Mostrar por día"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp"/>
+
 
     <TableLayout
         android:id="@+id/tablaLineas"

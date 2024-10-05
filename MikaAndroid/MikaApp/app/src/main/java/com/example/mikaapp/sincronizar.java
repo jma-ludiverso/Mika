@@ -84,8 +84,7 @@ public class sincronizar extends AppCompatActivity {
 
                     if (fichaActiva.lineas.size()==0){
                         fichaActiva.nFicha = c.getString(28);
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                        formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                         Date fec = formatter.parse(c.getString(0));
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(fec);
