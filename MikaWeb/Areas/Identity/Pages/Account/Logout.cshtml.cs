@@ -27,6 +27,10 @@ namespace MikaWeb.Areas.Identity.Pages.Account
         {
         }
 
+        //public void OnGet(string returnUrl = null)
+        //{
+        //}
+
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();

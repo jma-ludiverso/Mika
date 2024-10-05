@@ -107,10 +107,10 @@ namespace MikaWeb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -137,6 +137,7 @@ namespace MikaWeb
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
 
@@ -150,7 +151,7 @@ namespace MikaWeb
         protected PasswordConfiguration getPasswordConfiguration()
         {
             PasswordConfiguration ret = new PasswordConfiguration();
-            Configuration.GetSection("CustomConfiguration").Bind(ret);
+            Configuration.GetSection("PasswordConfiguration").Bind(ret);
             return ret;
         }
     }

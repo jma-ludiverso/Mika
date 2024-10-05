@@ -72,6 +72,7 @@ namespace MikaWeb.Controllers
                 {
                     Ficha f = new Ficha();
                     f.IdCliente = cli;
+                    f.FormaPago = "Tarjeta";
                     if (string.IsNullOrEmpty(numficha))
                     {
                         f.Fecha = System.DateTime.Now;
@@ -83,7 +84,6 @@ namespace MikaWeb.Controllers
                         //cargar ficha desde BD
                         f = await fext.CargaFicha(numficha, user.Salon.ToString());
                     }
-                    f.FormaPago = "Tarjeta";
                     data.Datos = f;
                     if (data.Datos.Lineas == null)
                     {

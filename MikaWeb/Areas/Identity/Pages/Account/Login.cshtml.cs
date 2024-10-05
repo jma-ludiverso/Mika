@@ -22,9 +22,7 @@ namespace MikaWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<MikaWebUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<MikaWebUser> signInManager, 
-            ILogger<LoginModel> logger,
-            UserManager<MikaWebUser> userManager)
+        public LoginModel(SignInManager<MikaWebUser> signInManager, ILogger<LoginModel> logger, UserManager<MikaWebUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -1,0 +1,9 @@
+Errores:
+	X Al modificar los datos de una línea de la ficha, no se actualizan los valores de la ficha. Sólo se ven los cambios en pantalla. 
+		· cuando se modifica la ficha antes de guardar se cambian los importes pero no la descripcion
+		· la descripcion no se cambia nunca
+	X Al sincronizar las fichas la fecha se retrasa un día en la web
+
+Mejoras:
+	X En fichas activas incluir un checbox para filtrar o no por fecha. El checkbox, por defecto, estará sin marcar para mostrar todas las fichas pendientes
+
