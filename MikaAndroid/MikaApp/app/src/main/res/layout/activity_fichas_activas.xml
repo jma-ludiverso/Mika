@@ -7,87 +7,31 @@
     android:background="@color/blackLight"
     tools:context=".fichas_activas">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <include layout="@layout/menu_sup"
+        android:id="@+id/menu"
+        android:layout_marginTop="1dp"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="126dp"
-        android:background="@color/whiteDarck"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_height="60dp"/>
 
-        <TextView
-            android:id="@+id/txtMika"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:fontFamily="serif"
-            android:text="MICA"
-            android:textSize="35dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txtPeluqueros"
-            app:layout_constraintHorizontal_bias="0.833"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtPeluqueros"
-            android:layout_width="135dp"
-            android:layout_height="38dp"
-            android:layout_marginEnd="972dp"
-            android:text="peluqueros"
-            android:textSize="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.643" />
-
-        <TextView
-            android:id="@+id/txtCorreo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="60dp"
-            android:text="ejemplo@gamil.com"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.636" />
-
-        <TextView
-            android:id="@+id/txtHola"
-            android:layout_width="55dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="2dp"
-            android:text="Hola"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txtCorreo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.692" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TableRow
+    <LinearLayout
         android:id="@+id/tableRow"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/menu">
 
         <TextView
             android:id="@+id/txtFechaCalendario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="570dp"
             android:layout_marginTop="15dp"
             android:text="00/00/0000"
             android:visibility="invisible"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="15sp" />
 
         <ImageButton
             android:id="@+id/ib_calendario"
@@ -98,18 +42,16 @@
             android:visibility="invisible"
             android:onClick="abrirCalendario"
             app:srcCompat="@drawable/calendary" />
-    </TableRow>
 
-    <Switch
-        android:id="@+id/mySwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="Mostrar por día"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="100dp"/>
+        <Switch
+            android:id="@+id/mySwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mostrar por día"
+            android:layout_marginTop="13dp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
 
     <TableLayout

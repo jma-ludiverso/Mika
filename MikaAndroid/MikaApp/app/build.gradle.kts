@@ -17,17 +17,34 @@ android {
     }
 
     buildTypes {
+        debug {
+            resValue("string", "api_url", "https://test.ludiverso.com/api/Resources/")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string", "api_url", "https://www.micapeluqueros.es/api/Resources/")
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    applicationVariants.all {
+        this.outputs
+                .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
+                .forEach { output ->
+                    val variant = this.buildType.name
+                    var apkName = "MikaApp_" + this.versionName
+                    if (variant.isNotEmpty()) apkName += "_$variant"
+                    apkName += ".apk"
+                    println("ApkName=$apkName ${this.buildType.name}")
+                    output.outputFileName = apkName
+                }
     }
 }
 

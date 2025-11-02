@@ -11,7 +11,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +29,14 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class dialog_new_line{
     Context dialogContext;
@@ -72,12 +78,16 @@ public class dialog_new_line{
         edtxtDescrpcion = (EditText) dialog.findViewById(R.id.edtxtDescrpcion);
         txtBase = (TextView) dialog.findViewById(R.id.txtBase);
         edtxtBaseE = (EditText) dialog.findViewById(R.id.edtxtBaseE);
+        edtxtBaseE.setFilters(new InputFilter[]{new DecimalInputFilter(10, 3)});
         TextView txtDescuento = (TextView) dialog.findViewById(R.id.txtDescuento);
         edtxtDesc = (EditText) dialog.findViewById(R.id.edtxtDesc);
+        edtxtDesc.setFilters(new InputFilter[]{new DecimalInputFilter(10, 2)});
         TextView txtIva = (TextView) dialog.findViewById(R.id.txtIva);
         edtxtIva = (EditText) dialog.findViewById(R.id.edtxtIva);
+        edtxtIva.setFilters(new InputFilter[]{new DecimalInputFilter(10, 2)});
         TextView txtTotal = (TextView) dialog.findViewById(R.id.txtTotal);
         edtxtTotal = (EditText) dialog.findViewById(R.id.edtxtTotal);
+        edtxtTotal.setFilters(new InputFilter[]{new DecimalInputFilter(10, 2)});
         Button b_cancelar = (Button) dialog.findViewById(R.id.b_cancelar);
         Button b_guardar = (Button) dialog.findViewById(R.id.b_guardar);
 
@@ -163,12 +173,12 @@ public class dialog_new_line{
                 if (!empleadoSeleccionado.equals("cod.") && servicioSelecionado!=null){
                     nueva_ficha ficha = (nueva_ficha) dialog.getOwnerActivity();
                     DatosFichaLinea linea = new DatosFichaLinea();
-                    linea.base = Float.parseFloat(edtxtBaseE.getText().toString());
+                    linea.base = parseFloat(edtxtBaseE.getText().toString());
                     linea.codigo = empleadoSeleccionado;
                     linea.idServicio = servicioSelecionado.idServicio;
-                    linea.descuentoPorc = Float.parseFloat(edtxtDesc.getText().toString());
-                    linea.ivaPorc = Float.parseFloat(edtxtIva.getText().toString());
-                    linea.total = Float.parseFloat(edtxtTotal.getText().toString());
+                    linea.descuentoPorc = parseFloat(edtxtDesc.getText().toString());
+                    linea.ivaPorc = parseFloat(edtxtIva.getText().toString());
+                    linea.total = parseFloat(edtxtTotal.getText().toString());
                     linea.descripcion = edtxtDescrpcion.getText().toString();
                     linea.descuentoCant = catDesc;
                     linea.idSalon = ActiveData.Ficha.idSalon;
@@ -399,8 +409,8 @@ public class dialog_new_line{
         {
             edtxtBaseE.setText("0");
         }
-        float desc = Float.parseFloat(edtxtDesc.getText().toString());
-        float precio = Float.parseFloat(edtxtBaseE.getText().toString());
+        float desc = parseFloat(edtxtDesc.getText().toString());
+        float precio = parseFloat(edtxtBaseE.getText().toString());
         float cantidad = precio * (desc / 100);
         catDesc = cantidad;
         this.CalculateIva();
@@ -418,8 +428,8 @@ public class dialog_new_line{
         {
             edtxtIva.setText("0");
         }
-        float precio = Float.parseFloat(edtxtBaseE.getText().toString());
-        float iva = Float.parseFloat(edtxtIva.getText().toString());
+        float precio = parseFloat(edtxtBaseE.getText().toString());
+        float iva = parseFloat(edtxtIva.getText().toString());
         float cantidad = (precio - catDesc) * (iva / 100);
         if (servicioSelecionado != null){
             servicioSelecionado.ivaCant = cantidad;
@@ -446,8 +456,8 @@ public class dialog_new_line{
         {
             edtxtIva.setText("0");
         }
-        float precio = Float.parseFloat(edtxtTotal.getText().toString());
-        float iva = Float.parseFloat(edtxtIva.getText().toString());
+        float precio = parseFloat(edtxtTotal.getText().toString());
+        float iva = parseFloat(edtxtIva.getText().toString());
         float preciobase = precio / ((iva / 100) + 1);
 
         DecimalFormat formatterBase = (DecimalFormat) NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
@@ -460,5 +470,53 @@ public class dialog_new_line{
             servicioSelecionado.ivaCant = precio - preciobase;
         }
         catDesc = 0;
+    }
+
+    public static class DecimalInputFilter implements InputFilter {
+        private final Pattern pattern;
+
+        public DecimalInputFilter(int maxIntegerDigits, int maxFractionDigits) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("es", "ES"));
+            char separator = symbols.getDecimalSeparator();
+            String separatorString = "\\" + String.valueOf(separator);
+
+            this.pattern = Pattern.compile("-?([0-9]{0," + maxIntegerDigits + "})?(" + separatorString + "[0-9]{0," + maxFractionDigits + "})?");
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            String futureString = dest.subSequence(0, dstart).toString() +
+                    source.subSequence(start, end).toString() +
+                    dest.subSequence(dend, dest.length()).toString();
+
+            Matcher matcher = pattern.matcher(futureString);
+
+            if (!matcher.matches()) {
+                return "";
+            }
+
+            return null;
+        }
+    }
+
+    // New helper method to parse floats with locale-specific separators
+    private float parseFloat(String str) {
+        if (str == null || str.isEmpty()) {
+            return 0.0f;
+        }
+        NumberFormat format = NumberFormat.getInstance(new Locale("es", "ES"));
+        try {
+            Number number = format.parse(str);
+            return number.floatValue();
+        } catch (ParseException e) {
+            if (!str.contains(",") && str.contains(".")) {
+                try {
+                    return Float.parseFloat(str);
+                } catch (NumberFormatException nfe) {
+                    return 0.0f;
+                }
+            }
+            return 0.0f;
+        }
     }
 }

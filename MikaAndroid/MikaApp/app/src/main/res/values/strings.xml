@@ -3,6 +3,44 @@
 
     <string name="api_url">https://test.ludiverso.com/api/Resources/</string>
 
+    <string name="base">Base €: </string>
+    <string name="baseH">Base (€)</string>
+    <string name="buscar">buscar</string>
+    <string name="cabeceraLinea">Ficha cliente - Línea de ficha</string>
+    <string name="cambio">Cambio €: </string>
+    <string name="cerrar_sesion">CERRAR SESION</string>
+    <string name="cero">0</string>
+    <string name="cliente">Cliente</string>
+    <string name="codigo">cod.</string>
+    <string name="descripcion">Descripción</string>
+    <string name="descuento">Descuento %: </string>
+    <string name="descuentoH">Descuento (%)</string>
+    <string name="descuentos">Descuentos: </string>
+    <string name="email">Email:</string>
+    <string name="empleado">Empleado</string>
+    <string name="espacio"> </string>
+    <string name="ficha">Ficha</string>
+    <string name="fichas_activas">FICHAS ACTIVAS</string>
+    <string name="formapago">Forma de Pago: </string>
+    <string name="guardarficha">Guardar ficha</string>
+    <string name="hola">Hola!</string>
+    <string name="iva">Iva €: </string>
+    <string name="ivaH">Iva (%)</string>
+    <string name="mika">MICA</string>
+    <string name="nombre">Nombre:</string>
+    <string name="nueva_ficha">NUEVA FICHA</string>
+    <string name="nuevalinea">Nueva línea</string>
+    <string name="nuevo_cliente">Agregar Cliente</string>
+    <string name="numero_simbolo">#</string>
+    <string name="pagado">Pagado €: </string>
+    <string name="peluqueros">peluqueros</string>
+    <string name="sincronizar">SINCRONIZAR</string>
+    <string name="telefono">Teléfono:</string>
+    <string name="tipo">Tipo</string>
+    <string name="total">Total €: </string>
+    <string name="totalH">Total (€)</string>
+    <string name="totalproductos">Total productos: </string>
+    <string name="totalservicios">Total servicios: </string>
     <string name="underlined_text_mod"><u>Modificar</u></string>
     <string name="underlined_text_elim"><u>Eliminar</u></string>
 

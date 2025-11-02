@@ -5,101 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blackLight"
-    tools:context=".fichas_activas">
+    tools:context=".seleccion_cliente">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <include layout="@layout/menu_sup"
+        android:layout_marginTop="1dp"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="126dp"
-        android:background="@color/whiteDarck"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
-
-        <TextView
-            android:id="@+id/txtMika"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:fontFamily="serif"
-            android:text="MICA"
-            android:textSize="35dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txtPeluqueros"
-            app:layout_constraintHorizontal_bias="0.833"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtPeluqueros"
-            android:layout_width="135dp"
-            android:layout_height="38dp"
-            android:layout_marginEnd="972dp"
-            android:text="peluqueros"
-            android:textSize="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.643" />
-
-        <TextView
-            android:id="@+id/txtCorreo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="60dp"
-            android:text="ejemplo@gamil.com"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.636" />
-
-        <TextView
-            android:id="@+id/txtHola"
-            android:layout_width="55dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="2dp"
-            android:text="Hola"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txtCorreo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.692" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="60dp"/>
 
     <TableLayout
-        android:layout_width="1280dp"
-        android:layout_height="771dp"
-        android:layout_marginTop="2dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
 
-        <TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent">
+                android:layout_width="match_parent"
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:weightSum="6">
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="568dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="84dp"
-                    android:layout_marginTop="130dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                    android:layout_weight="5"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nombre:"
+                        android:text="@string/nombre"
                         android:textColor="@color/whiteDarck"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/editTextNombre"
@@ -107,17 +58,16 @@
                         android:layout_height="49dp"
                         android:background="@color/white"
                         android:ems="10"
-                        android:hint=""
                         android:inputType="text"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Teléfono:"
+                        android:text="@string/telefono"
                         android:textColor="@color/whiteDarck"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/editTextTelefono"
@@ -125,26 +75,24 @@
                         android:layout_height="49dp"
                         android:background="@color/white"
                         android:ems="10"
-                        android:hint=""
                         android:inputType="text"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Email:"
+                        android:text="@string/email"
                         android:textColor="@color/whiteDarck"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/editTextSEmail"
                         android:layout_width="match_parent"
                         android:layout_height="49dp"
                         android:background="@color/white"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:textSize="20dp" />
+                        android:inputType="textEmailAddress"
+                        android:textSize="20sp" />
 
                     <Button
                         android:id="@+id/b_AgregarCliente"
@@ -153,58 +101,81 @@
                         android:layout_height="70dp"
                         android:backgroundTint="@color/grey"
                         android:layout_marginTop="30dp"
-                        android:textSize="23dp"
+                        android:textSize="23sp"
                         android:textAllCaps="false"
-                        android:text="Agregar Cliente" />
+                        android:text="@string/nuevo_cliente" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="457dp"
-                    android:layout_height="407dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="100dp"
-                    android:layout_marginLeft="70dp">
+                    android:layout_weight="1"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_gravity="top">
 
-                    <TableRow
+                    <TableLayout
                         android:layout_width="match_parent"
-                        android:layout_height="88dp"
-                        android:background="@color/black">
+                        android:layout_height="match_parent">
 
-                        <ImageView
-                            android:id="@+id/imageView3"
-                            android:layout_width="79dp"
-                            android:layout_height="59dp"
-                            android:layout_marginTop="15dp"
-                            app:srcCompat="@drawable/usuario" />
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="88dp"
+                            android:background="@color/black">
 
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="79dp"
-                            android:layout_height="34dp"
-                            android:layout_marginTop="30dp"
-                            android:text="Cliente"
-                            android:textColor="@color/white"
-                            android:textSize="24dp" />
+                            <ImageView
+                                android:id="@+id/imageView3"
+                                android:layout_width="79dp"
+                                android:layout_height="59dp"
+                                android:layout_marginTop="15dp"
+                                app:srcCompat="@drawable/usuario" />
 
-                        <EditText
-                            android:id="@+id/lupaCliente"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="50dp"
-                            android:layout_marginTop="30dp"
-                            android:layout_marginRight="20dp"
-                            android:background="@color/white"
-                            android:ems="10"
-                            android:hint="buscar"
-                            android:inputType="text"
-                            android:textSize="24dp" />
-                    </TableRow>
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="79dp"
+                                android:layout_height="34dp"
+                                android:layout_marginTop="30dp"
+                                android:text="@string/cliente"
+                                android:textColor="@color/white"
+                                android:textSize="24sp" />
 
-                    <ListView
-                        android:id="@+id/lista_de_clientes"
-                        android:layout_width="match_parent"
-                        android:layout_height="313dp"
-                        android:background="@color/white" />
+                            <EditText
+                                android:id="@+id/lupaCliente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="50dp"
+                                android:layout_marginTop="30dp"
+                                android:layout_marginEnd="20dp"
+                                android:background="@color/white"
+                                android:ems="10"
+                                android:hint="@string/buscar"
+                                android:inputType="text"
+                                android:textSize="24sp" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <ListView
+                                    android:id="@+id/lista_de_clientes"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/white" />
+
+                            </LinearLayout>
+
+                        </TableRow>
+                    </TableLayout>
 
                 </LinearLayout>
 

@@ -145,14 +145,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void InicioSesion() {
         try{
-            //TODO: Controlar que si no se han puesto usuario y contraseña que no haga nada
-
             String url = getString(R.string.api_url);
             url += "authenticate";
 
             AuthenticateRequest request = new AuthenticateRequest();
             request.userName = String.valueOf(userName.getText());
             request.password = String.valueOf(password.getText());
+
+            if(request.userName.isEmpty() || request.password.isEmpty()){
+                throw new Exception("Debe indicar el usuario y la contraseña");
+            }
 
             JSONObject jsonObject = new JSONObject(new Gson().toJson(request));
 
@@ -179,15 +181,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AutenticacionCorrecta(JSONObject response){
-        AuthenticateResponse resp = new Gson().fromJson(response.toString(), AuthenticateResponse.class);
-        if (resp.succeeded) {
-            ActiveData.sincronizar = true;
-            ActiveData.setLoginData(resp, getApplicationContext());
-            // Crear un Intent para iniciar la actividad del menú principal
-            Intent intent = new Intent(MainActivity.this, menu_principal.class);
-            startActivity(intent);
-            finish();
-        } else {
+        try{
+            AuthenticateResponse resp = new Gson().fromJson(response.toString(), AuthenticateResponse.class);
+            if (resp.succeeded) {
+                ActiveData.sincronizar = true;
+                ActiveData.setLoginData(resp, getApplicationContext());
+                // Crear un Intent para iniciar la actividad del menú principal
+                Intent intent = new Intent(MainActivity.this, menu_principal.class);
+                startActivity(intent);
+                finish();
+            } else {
+                throw new Exception();
+            }
+        }catch (Exception ex){
             // Manejar el caso en que el inicio de sesión no sea exitoso
             // Mostrar un Toast indicando que el inicio de sesión no fue exitoso
             Toast.makeText(MainActivity.this, "Inicio de sesión fallido", Toast.LENGTH_SHORT).show();
@@ -195,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void TokenRenovacion() {
-
         try {
             String url = getString(R.string.api_url);
             url += "authenticaterenewal";
